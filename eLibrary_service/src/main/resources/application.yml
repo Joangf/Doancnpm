@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: eLibrary_service
+  datasource:
+    url: jdbc:mysql://localhost:3306/eLibrary_service
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: cnpmhcmut@gmail.com
+    password: nvbs ecpy zlyh ajxf
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+server:
+  port: 8080
+
+
+jwt:
+  signerKey: "dmfWBuIIiGyXCJWG/6cioNLt7IRMSp3CgKMRitccCgDZKe/PQMHI6/gt1oGYNAGX"
+  valid-duration: 600000 #in second
+  refreshable-duration: 3000 #in second
+
+

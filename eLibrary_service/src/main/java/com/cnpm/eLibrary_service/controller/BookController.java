@@ -1,0 +1,54 @@
+package com.cnpm.eLibrary_service.controller;
+
+import com.cnpm.eLibrary_service.dto.request.BookRequest;
+import com.cnpm.eLibrary_service.dto.response.ApiResponse;
+import com.cnpm.eLibrary_service.dto.response.BookResponse;
+import com.cnpm.eLibrary_service.service.BookService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/book")
+@RequiredArgsConstructor
+public class BookController {
+    private final BookService bookService;
+
+    @PostMapping
+    public ApiResponse<BookResponse> createBook(@RequestBody BookRequest request) {
+        return ApiResponse.<BookResponse>builder()
+                .result(bookService.createBook(request))
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<BookResponse> getBook(@PathVariable Long id) {
+        return ApiResponse.<BookResponse>builder()
+                .result(bookService.getBook(id))
+                .build();
+    }
+
+    @GetMapping
+    public ApiResponse<List<BookResponse>> getAllBooks() {
+        return ApiResponse.<List<BookResponse>>builder()
+                .result(bookService.getAllBooks())
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<BookResponse> updateBook(@PathVariable Long id,
+                                                @RequestBody BookRequest request) {
+        return ApiResponse.<BookResponse>builder()
+                .result(bookService.updateBook(id, request))
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<String> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return ApiResponse.<String>builder()
+                .result("Book has been deleted successfully")
+                .build();
+    }
+}
