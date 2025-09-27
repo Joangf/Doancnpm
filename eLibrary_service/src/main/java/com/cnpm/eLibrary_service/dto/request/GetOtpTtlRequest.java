@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationRequest {
-    String username;
-    String password;
+public class GetOtpTtlRequest {
+    String email;
 }

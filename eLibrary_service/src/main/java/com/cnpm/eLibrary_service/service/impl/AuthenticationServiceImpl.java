@@ -11,6 +11,7 @@ import com.cnpm.eLibrary_service.repository.UserRepository;
 import com.cnpm.eLibrary_service.service.AuthenticationService;
 import com.cnpm.eLibrary_service.service.MailService;
 import com.cnpm.eLibrary_service.service.RedisService;
+import com.cnpm.eLibrary_service.service.VerificationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -37,6 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RedisService redisService;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final VerificationService verificationService;
 
     @Value("${jwt.signerKey}")
     protected String SECRET_KEY;
@@ -63,14 +65,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse login(AuthenticationRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() ->new AppException(ErrorCode.USERNAME_NOT_EXISTED));
+    public AuthenticationResponse login(LoginRequest request) {
+        String identifier = request.getIdentifier();
+
+        User user = userRepository.findByUsername(identifier)
+                .or(() -> userRepository.findByEmail(identifier))
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         boolean isAuthenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if(!isAuthenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        if (!user.isVerified()) {
+            String redisKey = "otp:" + user.getEmail();
+            String cachedOtp = redisService.getValue(redisKey);
+
+            if (cachedOtp == null)
+                verificationService.sendVerificationOtp(user.getEmail());
+
+            throw new AppException(ErrorCode.USER_NOT_VERIFIED);
+        }
+
 
         String token = generateToken(user);
 

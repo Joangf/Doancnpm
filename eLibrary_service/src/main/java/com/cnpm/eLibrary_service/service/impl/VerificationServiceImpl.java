@@ -1,7 +1,9 @@
 package com.cnpm.eLibrary_service.service.impl;
 
 import com.cnpm.eLibrary_service.dto.request.EmailVerificationRequest;
+import com.cnpm.eLibrary_service.dto.request.GetOtpTtlRequest;
 import com.cnpm.eLibrary_service.dto.response.EmailVerificationResponse;
+import com.cnpm.eLibrary_service.dto.response.GetOtpTtlResponse;
 import com.cnpm.eLibrary_service.exception.AppException;
 import com.cnpm.eLibrary_service.exception.ErrorCode;
 import com.cnpm.eLibrary_service.entity.User;
@@ -53,6 +55,18 @@ public class VerificationServiceImpl implements VerificationService {
                 .build();
 
     }
+
+    @Override
+    public GetOtpTtlResponse getOtpTtl(GetOtpTtlRequest request) {
+        Long ttl = redisService.getTtl("otp:" + request.getEmail(), TimeUnit.SECONDS);
+        if (ttl == null || ttl <= 0) {
+            throw new AppException(ErrorCode.OTP_EXPIRED);
+        }
+        return GetOtpTtlResponse.builder()
+                .Ttl(ttl)
+                .build();
+    }
+
 
     private String generateOtp() {
         return String.valueOf(100000 + new Random().nextInt(900000));

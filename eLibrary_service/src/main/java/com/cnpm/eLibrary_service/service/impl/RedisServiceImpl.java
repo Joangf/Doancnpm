@@ -27,4 +27,9 @@ public class RedisServiceImpl implements RedisService {
     public void deleteValue(String key) {
         redisTemplate.delete(key);
     }
+
+    @Override
+    public Long getTtl(String key, TimeUnit unit) {
+        return redisTemplate.getExpire(key, unit);
+    }
 }

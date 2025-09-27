@@ -12,7 +12,7 @@ public interface AuthenticationService {
     IntrospectResponse introspect(IntrospectRequest request)
             throws JOSEException, ParseException;
 
-    AuthenticationResponse login(AuthenticationRequest request);
+    AuthenticationResponse login(LoginRequest request);
 
     void logout(LogoutRequest request)
             throws ParseException, JOSEException;
