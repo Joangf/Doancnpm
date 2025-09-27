@@ -36,3 +36,9 @@ build/
 /mysql/
 /target/
 /*.log
+
+### Redis data files
+redis/*.rdb
+redis/*.aof
+redis/appendonlydir/
+
