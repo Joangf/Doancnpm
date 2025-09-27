@@ -102,16 +102,14 @@ public class UserSubscriptionServiceImpl implements UserSubscriptionService {
 
         for (UserSubscription sub : activeSubs) {
             if (sub.getEndDateTime() != null && sub.getEndDateTime().isBefore(now)) {
-                // hết hạn thì chuyển trạng thái
                 sub.setStatus(SubscriptionStatus.EXPIRED);
                 subscriptionRepository.save(sub);
             } else {
-                // còn hạn thì return ngay
                 return sub;
             }
         }
 
-        // fallback về subscription BASIC của user
+
         return subscriptionRepository.findBasicPlan(user)
                 .orElseThrow(() -> new AppException(ErrorCode.PLAN_NOT_EXISTED));
     }
