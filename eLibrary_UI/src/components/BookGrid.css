@@ -1,0 +1,110 @@
+.book-grid {
+  width: 100%;
+  padding: 60px 0;
+  background: #1f1f1f;
+}
+
+.book-grid-container {
+  max-width: 1454px;
+  margin: 0 auto;
+  padding: 0 49px;
+  display: grid;
+  grid-template-columns: repeat(5, 203px);
+  grid-template-rows: repeat(2, 299px);
+  gap: 88px 313px;
+  justify-content: center;
+}
+
+.book-grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-cover-placeholder {
+  width: 203px;
+  height: 299px;
+  background: #4a4a4a;
+  border-radius: 5px;
+  box-shadow: 0 7px 4px 0 rgba(110, 110, 110, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.book-cover-placeholder:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 8px 0 rgba(110, 110, 110, 0.35);
+}
+
+/* Responsive Design */
+@media (max-width: 1600px) {
+  .book-grid-container {
+    max-width: 1200px;
+    grid-template-columns: repeat(4, 203px);
+    grid-template-rows: repeat(3, 299px);
+    gap: 60px 200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .book-grid-container {
+    max-width: 900px;
+    grid-template-columns: repeat(3, 180px);
+    grid-template-rows: repeat(4, 260px);
+    gap: 50px 150px;
+    padding: 0 30px;
+  }
+  
+  .book-cover-placeholder {
+    width: 180px;
+    height: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .book-grid {
+    padding: 40px 0;
+  }
+  
+  .book-grid-container {
+    max-width: 600px;
+    grid-template-columns: repeat(2, 160px);
+    grid-template-rows: repeat(5, 230px);
+    gap: 40px 100px;
+    padding: 0 20px;
+  }
+  
+  .book-cover-placeholder {
+    width: 160px;
+    height: 230px;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-grid-container {
+    max-width: 400px;
+    grid-template-columns: repeat(2, 140px);
+    grid-template-rows: repeat(5, 200px);
+    gap: 30px 80px;
+    padding: 0 15px;
+  }
+  
+  .book-cover-placeholder {
+    width: 140px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 360px) {
+  .book-grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(10, 200px);
+    gap: 30px;
+    justify-items: center;
+  }
+  
+  .book-cover-placeholder {
+    width: 140px;
+    height: 200px;
+  }
+}

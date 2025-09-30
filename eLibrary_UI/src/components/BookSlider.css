@@ -1,0 +1,294 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+.book-slider {
+  width: 100%;
+  margin-top: 140px;
+  padding: 20px 0;
+  background: #1f1f1f;
+  min-height: 350px;
+}
+
+.book-slider-content {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 49px;
+}
+
+.books-container {
+  display: flex;
+  gap: 148px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 20px 0 0 20px;
+}
+
+.books-container::-webkit-scrollbar {
+  display: none;
+}
+
+.book-card {
+  position: relative;
+  width: 509px;
+  height: 311px;
+  flex-shrink: 0;
+}
+
+.book-background {
+  position: absolute;
+  left: 18px;
+  top: 20px;
+  width: 489px;
+  height: 272px;
+  border-radius: 5px;
+  box-shadow: 0 6px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.book-image-placeholder {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 203px;
+  height: 299px;
+  background: #8B4513;
+  border-radius: 2px;
+  transform: rotate(-3.496deg);
+  box-shadow: 
+    0 7px 4px 0 rgba(0, 0, 0, 0.50),
+    5px 0 0 0 #FFF,
+    10px 0 0 0 #D8D8D8,
+    15px 0 0 0 #FFF;
+}
+
+.book-content {
+  position: absolute;
+  left: 270px;
+  top: 51px;
+  width: 237px;
+}
+
+.book-title {
+  color: #FFF;
+  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0 0 20px 0;
+  width: 190px;
+  height: 41px;
+}
+
+.book-description {
+  color: #D2D2D2;
+  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0 0 20px 0;
+  width: 237px;
+}
+
+.book-genres {
+  color: #E2E2E2;
+  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0 0 15px 0;
+  position: relative;
+  left: 45px;
+}
+
+.read-now-button {
+  position: relative;
+  left: 30px;
+  width: 148px;
+  height: 33px;
+  background: transparent;
+  border: 1px solid #FFF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.read-now-button span {
+  color: #FFF;
+  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: normal;
+  display: block;
+}
+
+.read-now-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.read-now-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .book-slider-content {
+    padding: 0 30px;
+  }
+  
+  .books-container {
+    gap: 100px;
+  }
+  
+  .book-card {
+    width: 450px;
+    height: 280px;
+  }
+  
+  .book-background {
+    width: 430px;
+    height: 240px;
+  }
+  
+  .book-image-placeholder {
+    width: 180px;
+    height: 260px;
+  }
+  
+  .book-content {
+    left: 240px;
+    width: 200px;
+  }
+  
+  .book-title {
+    font-size: 30px;
+    width: 160px;
+  }
+  
+  .book-description {
+    width: 200px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .book-slider {
+    margin-top: 110px;
+  }
+  
+  .book-slider-content {
+    padding: 0 20px;
+  }
+  
+  .books-container {
+    gap: 80px;
+  }
+  
+  .book-card {
+    width: 400px;
+    height: 250px;
+  }
+  
+  .book-background {
+    width: 380px;
+    height: 210px;
+    left: 15px;
+    top: 18px;
+  }
+  
+  .book-image-placeholder {
+    width: 160px;
+    height: 230px;
+  }
+  
+  .book-content {
+    left: 200px;
+    top: 40px;
+    width: 180px;
+  }
+  
+  .book-title {
+    font-size: 26px;
+    width: 140px;
+    height: 35px;
+  }
+  
+  .book-description {
+    width: 180px;
+    font-size: 10px;
+  }
+  
+  .book-genres {
+    font-size: 10px;
+    left: 35px;
+  }
+  
+  .read-now-button {
+    width: 130px;
+    height: 30px;
+    left: 25px;
+  }
+  
+  .read-now-button span {
+    font-size: 15px;
+    padding-top: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-slider-content {
+    padding: 0 15px;
+  }
+  
+  .books-container {
+    gap: 60px;
+  }
+  
+  .book-card {
+    width: 350px;
+    height: 220px;
+  }
+  
+  .book-background {
+    width: 330px;
+    height: 180px;
+    left: 12px;
+    top: 15px;
+  }
+  
+  .book-image-placeholder {
+    width: 140px;
+    height: 200px;
+  }
+  
+  .book-content {
+    left: 170px;
+    top: 35px;
+    width: 160px;
+  }
+  
+  .book-title {
+    font-size: 22px;
+    width: 120px;
+    height: 30px;
+  }
+  
+  .book-description {
+    width: 160px;
+    font-size: 9px;
+  }
+  
+  .book-genres {
+    font-size: 9px;
+    left: 30px;
+  }
+  
+  .read-now-button {
+    width: 120px;
+    height: 28px;
+    left: 20px;
+  }
+  
+  .read-now-button span {
+    font-size: 14px;
+    padding-top: 5px;
+  }
+}
