@@ -6,6 +6,7 @@ import com.cnpm.eLibrary_service.dto.response.ApiResponse;
 import com.cnpm.eLibrary_service.dto.response.UserResponse;
 import com.cnpm.eLibrary_service.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +31,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ApiResponse<List<UserResponse>> getAllUsers() {
-        return ApiResponse.<List<UserResponse>>builder()
-                .result(userService.getAllUsers())
+    public ApiResponse<Page<UserResponse>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ApiResponse.<Page<UserResponse>>builder()
+                .result(userService.getAllUsers(page, size))
                 .build();
     }
 

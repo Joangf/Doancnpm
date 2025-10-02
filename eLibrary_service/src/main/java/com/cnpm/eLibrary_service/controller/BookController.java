@@ -5,6 +5,7 @@ import com.cnpm.eLibrary_service.dto.response.ApiResponse;
 import com.cnpm.eLibrary_service.dto.response.BookResponse;
 import com.cnpm.eLibrary_service.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +31,12 @@ public class BookController {
     }
 
     @GetMapping
-    public ApiResponse<List<BookResponse>> getAllBooks() {
-        return ApiResponse.<List<BookResponse>>builder()
-                .result(bookService.getAllBooks())
+    public ApiResponse<Page<BookResponse>> getAllBooks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ApiResponse.<Page<BookResponse>>builder()
+                .result(bookService.getAllBooks(page,size))
                 .build();
     }
 

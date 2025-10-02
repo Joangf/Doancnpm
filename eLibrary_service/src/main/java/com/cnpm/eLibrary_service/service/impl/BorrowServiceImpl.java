@@ -16,6 +16,9 @@ import com.cnpm.eLibrary_service.repository.UserRepository;
 import com.cnpm.eLibrary_service.service.BorrowService;
 import com.cnpm.eLibrary_service.service.UserSubscriptionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -108,12 +111,13 @@ public class BorrowServiceImpl implements BorrowService {
     }
 
     @Override
-    public List<BorrowResponse> getUserBorrows(String userId) {
+    public Page<BorrowResponse> getUserBorrows(String userId, int page, int size) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_EXISTED));
 
-        return borrowRepository.findAllByUser(user).stream()
-                .map(borrowMapper::toBorrowResponse)
-                .toList();
+        Pageable pageable = PageRequest.of(page,size);
+
+        return borrowRepository.findAllByUser(user,pageable)
+                .map(borrowMapper::toBorrowResponse);
     }
 }

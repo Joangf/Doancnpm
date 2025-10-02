@@ -16,6 +16,9 @@ import com.cnpm.eLibrary_service.service.MailService;
 import com.cnpm.eLibrary_service.service.UserSubscriptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -81,13 +84,13 @@ public class UserSubscriptionServiceImpl implements UserSubscriptionService {
     }
 
     @Override
-    public List<UserSubscriptionResponse> getUserSubscriptions(String userId) {
+    public Page<UserSubscriptionResponse> getUserSubscriptions(String userId, int page, int size) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_EXISTED));
 
-        return subscriptionRepository.findByUser(user).stream()
-                .map(subscriptionMapper::toResponse)
-                .toList();
+        Pageable pageable = PageRequest.of(page, size);
+        return subscriptionRepository.findByUser(user, pageable)
+                .map(subscriptionMapper::toResponse);
     }
 
     /**

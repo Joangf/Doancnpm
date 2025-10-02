@@ -11,6 +11,9 @@ import com.cnpm.eLibrary_service.repository.BookRepository;
 import com.cnpm.eLibrary_service.repository.CategoryRepository;
 import com.cnpm.eLibrary_service.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,10 +56,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponse> getAllBooks() {
-        return bookRepository.findAll().stream()
-                .map(bookMapper::toBookResponse)
-                .toList();
+    public Page<BookResponse> getAllBooks(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+
+        return bookRepository.findAll(pageable)
+                .map(bookMapper::toBookResponse);
     }
 
     @Override

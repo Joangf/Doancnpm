@@ -5,6 +5,7 @@ import com.cnpm.eLibrary_service.dto.response.ApiResponse;
 import com.cnpm.eLibrary_service.dto.response.UserSubscriptionResponse;
 import com.cnpm.eLibrary_service.service.UserSubscriptionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,9 +36,13 @@ public class UserSubscriptionController {
 
 
     @GetMapping("/user/{userId}")
-    public ApiResponse<List<UserSubscriptionResponse>> getUserSubscriptions(@PathVariable String userId) {
-        return ApiResponse.<List<UserSubscriptionResponse>>builder()
-                .result(subscriptionService.getUserSubscriptions(userId))
+    public ApiResponse<Page<UserSubscriptionResponse>> getUserSubscriptions(
+            @PathVariable String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+            ) {
+        return ApiResponse.<Page<UserSubscriptionResponse>>builder()
+                .result(subscriptionService.getUserSubscriptions(userId,page,size))
                 .build();
     }
 }
