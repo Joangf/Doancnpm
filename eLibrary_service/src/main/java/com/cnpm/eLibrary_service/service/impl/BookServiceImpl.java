@@ -32,13 +32,13 @@ public class BookServiceImpl implements BookService {
         // Map request → entity
         Book book = bookMapper.toBook(request);
 
-        // Lấy categories từ DB theo IDs
-        Set<Category> categories = categoryRepository.findAllById(request.getCategoryIds())
+        // Lấy categories từ DB theo Names
+        Set<Category> categories = categoryRepository.findAllByNameIn(request.getCategoryNames())
                 .stream().collect(Collectors.toSet());
 
         // Validate: nếu có id không tồn tại
-        if (categories.size() != request.getCategoryIds().size()) {
-            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
+        if (categories.size() != request.getCategoryNames().size()) {
+            throw new AppException(ErrorCode.CATEGORY_NAME_NOT_EXISTED);
         }
 
         // Gắn categories vào book
@@ -72,11 +72,11 @@ public class BookServiceImpl implements BookService {
         bookMapper.updateBook(request, book);
 
         // update categories nếu request có gửi
-        if (request.getCategoryIds() != null) {
-            Set<Category> categories = categoryRepository.findAllById(request.getCategoryIds())
+        if (request.getCategoryNames() != null) {
+            Set<Category> categories = categoryRepository.findAllByNameIn(request.getCategoryNames())
                     .stream().collect(Collectors.toSet());
 
-            if (categories.size() != request.getCategoryIds().size()) {
+            if (categories.size() != request.getCategoryNames().size()) {
                 throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
             }
             book.setCategories(categories);

@@ -11,5 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class BorrowRequest {
     String userId;
     Long bookId;
-    Integer borrowDays; // số ngày muốn mượn
+    Integer borrowDays;
 }

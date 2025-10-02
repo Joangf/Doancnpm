@@ -42,6 +42,10 @@ public class BorrowServiceImpl implements BorrowService {
         Book book = bookRepository.findById(request.getBookId())
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
 
+        if (borrowRepository.existsByUserAndBookAndReturnDateTimeIsNull(user, book)) {
+            throw new AppException(ErrorCode.ALREADY_BORROWED);
+        }
+
         // Validate số ngày theo subscription
         UserSubscription sub = subscriptionService.getValidSubscription(user);
         if (request.getBorrowDays() > sub.getSubscriptionPlan().getMaxBorrowDays()) {

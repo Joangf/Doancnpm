@@ -1,5 +1,6 @@
 package com.cnpm.eLibrary_service.entity;
 
+import com.cnpm.eLibrary_service.entity.enums.Language;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +19,11 @@ public class Book {
     Long id;
 
     String title;
+    String translatedTitle;
+
+    @Enumerated(EnumType.STRING)
+    Language language;
+
     String author;
     String publisher;
     Integer publishYear;
@@ -27,6 +33,9 @@ public class Book {
 
     @Column(length = 1000)
     String pdfUrl;
+
+    @Column(length = 1000)
+    String coverUrl;
 
     @ManyToMany(mappedBy = "books")
     Set<Category> categories;

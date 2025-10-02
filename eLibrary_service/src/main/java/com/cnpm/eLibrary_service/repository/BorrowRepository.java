@@ -1,5 +1,6 @@
 package com.cnpm.eLibrary_service.repository;
 
+import com.cnpm.eLibrary_service.entity.Book;
 import com.cnpm.eLibrary_service.entity.Borrow;
 import com.cnpm.eLibrary_service.entity.User;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,8 @@ import java.util.List;
 @Repository
 public interface BorrowRepository extends JpaRepository<Borrow,Long> {
     Page<Borrow> findAllByUser(User user, Pageable pageable);
+
+    boolean existsByUserAndBookAndReturnDateTimeIsNull(User user, Book book);
 
     @Query("SELECT b FROM Borrow b " +
             "WHERE b.returnDateTime IS NULL " +
