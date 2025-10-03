@@ -202,12 +202,23 @@ const Login = ({ onBack }) => {
           onChange={handleInputChange}
           required
           placeholder="Confirm your password"
+          style={{
+          borderColor:
+            formData.confirmPassword && formData.password !== formData.confirmPassword
+              ? "red"
+              : "green"
+          }}
         />
+        {(formData.password !== formData.confirmPassword) && (
+          <div className="error_message" style={{ color: "red" }}>
+            Passwords do not match
+          </div>
+        )}
       </div>
       <button
         type="submit"
         className="auth-button primary"
-        disabled={isLoading}
+        disabled={isLoading || (formData.password !== formData.confirmPassword)}
       >
         {isLoading ? (
           <>

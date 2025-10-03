@@ -452,3 +452,9 @@
     padding: 15px;
   }
 }
+
+.error_message {
+  font-size: 14px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
