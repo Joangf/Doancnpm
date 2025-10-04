@@ -40,6 +40,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse createUser(CreateUserRequest request) {
 
+        // Check trùng username
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        }
+
+        // Check trùng email
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -83,7 +93,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_EXISTED));
 
         userMapper.updateUser(request, user);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
 
         return userMapper.toUserResponse(user);

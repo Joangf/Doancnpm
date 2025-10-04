@@ -2,6 +2,8 @@ package com.cnpm.eLibrary_service.service.impl;
 
 import com.cnpm.eLibrary_service.dto.request.BookRequest;
 import com.cnpm.eLibrary_service.dto.response.BookResponse;
+import com.cnpm.eLibrary_service.es_mapper.BookEsMapper;
+import com.cnpm.eLibrary_service.es_repository.BookEsRepository;
 import com.cnpm.eLibrary_service.exception.AppException;
 import com.cnpm.eLibrary_service.exception.ErrorCode;
 import com.cnpm.eLibrary_service.mapper.BookMapper;
@@ -24,13 +26,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final BookEsRepository bookEsRepository;
     private final CategoryRepository categoryRepository; // thêm repo cho category
     private final BookMapper bookMapper;
+    private final BookEsMapper bookEsMapper;
 
     @Override
     public BookResponse createBook(BookRequest request) {
         // Map request → entity
         Book book = bookMapper.toBook(request);
+
+        if (request.getCategoryNames() == null || request.getCategoryNames().isEmpty()) {
+            throw new AppException(ErrorCode.BOOK_MUST_HAVE_CATEGORY);
+        }
 
         // Lấy categories từ DB theo Names
         Set<Category> categories = categoryRepository.findAllByNameIn(request.getCategoryNames())
@@ -44,8 +52,12 @@ public class BookServiceImpl implements BookService {
         // Gắn categories vào book
         book.setCategories(categories);
 
+        Book savedBook =  bookRepository.save(book);
+
+        bookEsRepository.save(bookEsMapper.toBookEs(savedBook));
+
         // Save và trả response
-        return bookMapper.toBookResponse(bookRepository.save(book));
+        return bookMapper.toBookResponse(savedBook);
     }
 
     @Override
@@ -73,6 +85,10 @@ public class BookServiceImpl implements BookService {
 
         // update categories nếu request có gửi
         if (request.getCategoryNames() != null) {
+            if (request.getCategoryNames().isEmpty()) {
+                throw new AppException(ErrorCode.BOOK_MUST_HAVE_CATEGORY);
+            }
+
             Set<Category> categories = categoryRepository.findAllByNameIn(request.getCategoryNames())
                     .stream().collect(Collectors.toSet());
 
@@ -82,7 +98,11 @@ public class BookServiceImpl implements BookService {
             book.setCategories(categories);
         }
 
-        return bookMapper.toBookResponse(bookRepository.save(book));
+        Book updatedBook = bookRepository.save(book);
+
+        bookEsRepository.save(bookEsMapper.toBookEs(updatedBook));
+
+        return bookMapper.toBookResponse(updatedBook);
     }
 
     @Override
@@ -90,5 +110,9 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
         bookRepository.delete(book);
+
+        bookRepository.delete(book);
+
+        bookEsRepository.deleteById(book.getId().toString());
     }
 }

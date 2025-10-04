@@ -25,7 +25,10 @@ public enum ErrorCode {
     OTP_EXPIRED(1014, "OTP code expired", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1015, "User not found with given username or email", HttpStatus.BAD_REQUEST),
     CATEGORY_NAME_NOT_EXISTED(1016, "Category name is not existed", HttpStatus.BAD_REQUEST),
-    ALREADY_BORROWED(1017, "This book has already been borrowed by this user", HttpStatus.BAD_REQUEST)
+    ALREADY_BORROWED(1017, "This book has already been borrowed by this user", HttpStatus.BAD_REQUEST),
+    BOOK_MUST_HAVE_CATEGORY(1018, "Book must belong to at least one category", HttpStatus.BAD_REQUEST),
+    USERNAME_EXISTED(1019, "Username existed", HttpStatus.BAD_REQUEST),
+    EMAIL_EXISTED(1020, "Email existed", HttpStatus.BAD_REQUEST)
 ;
     ErrorCode(int code, String message, HttpStatus statusCode) {
         this.code = code;
