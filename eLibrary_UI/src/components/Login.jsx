@@ -1,306 +1,122 @@
-import React, { act, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import react from '../assets/react.svg'
+import TickingSuccess from "./TickingSuccess";
+import Log from "./AuthForm/Log"
+import Register from "./AuthForm/Reg"
+import OTP from "./AuthForm/OTP.JSX";
+import Forgot from "./AuthForm/Forgot";
+import Reset from "./AuthForm/Reset";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
-const Login = ({ onBack }) => {
+const Login = () => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: "sad",
-    password: "sda",
-    firstName: "sad",
-    lastName: "sdd",
-    email: "a@gmail.com",
+    username: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    email: "",
     role: "USER",
-    confirmPassword: "asd",
+    confirmPassword: "",
     otp: ''
   });
-
+  const [submitDone, setSubmitDone] = useState(false);
+  const [invalidSubmit, setInvalidSubmit] = useState(false);
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    if(invalidSubmit) setInvalidSubmit(false);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (activeTab === "register") {
-      const { confirmPassword, otp, ...registerData } = formData;
-      setIsLoading(true);
-      try {
-          const response = await fetch(`${API_URL}/user`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(registerData),
-        });
-        console.log("Register attempt:", formData);
-        if(response.ok){
-          setActiveTab('otp');
-        }
-      } catch (error) {
-        console.error("Registration failed:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    } else if (activeTab === "login") {
-      try {
-          const response = await fetch(`${API_URL}/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            identifier: formData.email,
-            password: formData.password
-          })
-        });
-        console.log("Login attempt:", formData);
-        if (response.ok){
-          alert("Successful login");
-        }
-      }
-      catch(error){
-        console.error("Login failed:",error);
-      }
-    } else if (activeTab === "forgot") {
-      console.log("Forgot password for:", formData.email);
-    } else if (activeTab === "otp") {
-        const {email, otp} = formData;
-        const otpVerify = {email, otp};
-        setIsLoading(true);
-        try {
-          const response = await fetch(`${API_URL}/verify/email`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(otpVerify)
-        });
-        console.log("OTP attempt:", otpVerify);
-        if(response.ok){
-          alert("Successful verfication")
-        }
+  const doRequest = async (url, data, onSuccess) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_URL}${url}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
+      if (response.ok && onSuccess) {
+        onSuccess(response);
       }
-      catch(error){
-        console.error("Verification failed:", error);
+      else{
+        setInvalidSubmit(true);
       }
-      finally{
-        setIsLoading(false);
-      }
+    } catch (error) {
+      console.error("Request failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const renderLoginForm = () => (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          placeholder="Enter your email"
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          required
-          placeholder="Enter your password"
-        />
-      </div>
-      <button type="submit" className="auth-button primary">
-        Login
-      </button>
-      <button
-        type="button"
-        className="forgot-password-link"
-        onClick={() => setActiveTab("forgot")}
-      >
-        Forgot Password?
-      </button>
-    </form>
-  );
+  if (activeTab === "register") {
+    const { confirmPassword, otp, ...registerData } = formData;
+    if (formData.password != formData.confirmPassword){
+      return;
+    }
+    console.log("Register attempt:", registerData);
 
-  const renderRegisterForm = () => (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="firstName">First Name</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            required
-            placeholder="First name"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            required
-            placeholder="Last name"
-          />
-        </div>
-      </div>
-      <div className="form-group">
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value={formData.username}
-          onChange={handleInputChange}
-          required
-          placeholder="Choose a username"
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          placeholder="Enter your email"
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          required
-          placeholder="Create a password"
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleInputChange}
-          required
-          placeholder="Confirm your password"
-          style={{
-          borderColor:
-            formData.confirmPassword && formData.password !== formData.confirmPassword
-              ? "red"
-              : "green"
-          }}
-        />
-        {(formData.password !== formData.confirmPassword) && (
-          <div className="error_message" style={{ color: "red" }}>
-            Passwords do not match
-          </div>
-        )}
-      </div>
-      <button
-        type="submit"
-        className="auth-button primary"
-        disabled={isLoading || (formData.password !== formData.confirmPassword)}
-      >
-        {isLoading ? (
-          <>
-            <div className="loading-spinner"></div>
-            Creating Account...
-          </>
-        ) : (
-          "Create Account"
-        )}
-      </button>
-    </form>
-  );
+    await doRequest("/user", registerData, () => {
+      setActiveTab("otp");
+    });
 
-  const renderForgotPasswordForm = () => (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          placeholder="Enter your email"
-        />
-      </div>
-      <button type="submit" className="auth-button primary">
-        Reset Password
-      </button>
-      <button
-        type="button"
-        className="back-to-login-link"
-        onClick={() => setActiveTab("login")}
-      >
-        Back to Login
-      </button>
-    </form>
-  );
-  const renderOTPForm = () => (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <div className="form-group">
-      <p>We have sent a verification code to your email <i>{formData.email}</i>. Please enter the OTP to verify.</p>
-        <label htmlFor="otp">OTP</label>
-        <input
-          type="otp"
-          id="otp"
-          name="otp"
-          value={formData.otp}
-          onChange={handleInputChange}
-          required
-          placeholder="Enter your OTP"
-        />
-      </div>
-      <button
-        type="submit"
-        className="auth-button primary"
-        disabled={isLoading}
-      >
-        {isLoading ? (
-          <>
-            <div className="loading-spinner"></div>
-            Verifying Account...
-          </>
-        ) : (
-          "Verify"
-        )}
-      </button>
-      <button
-        type="button"
-        className="back-to-login-link"
-        onClick={() => setActiveTab("login")}
-      >
-        Back to Login
-      </button>
-    </form>
-  );
+  } else if (activeTab === "login") {
+    const loginData = {identifier: formData.email,password: formData.password,}
+    console.log("Login attempt:", loginData);
+
+    await doRequest("/auth/login", loginData, () => {
+      alert("Successful login");
+    });
+    
+
+  } else if (activeTab === "forgot") {
+    console.log("Forgot password for:", formData.email);
+    await doRequest("/auth/forgot-password", formData.email, () => {
+      setActiveTab("reset");
+    });
+
+  } else if (activeTab === "otp") {
+    const { email, otp } = formData;
+    const otpData = { email, otp };
+    console.log("OTP attempt:", otpData);
+
+    await doRequest("/verify/email", otpData, () => {
+      setSubmitDone(true);  
+      setTimeout(() => setSubmitDone(false), 2000);
+      setActiveTab("login");
+    });
+  } else if (activeTab === "reset") {
+    if (formData.password != formData.confirmPassword){
+      return;
+    }
+    const tokenData = {token: formData.otp, password: formData.password}
+    console.log("Reset attempt:", tokenData);
+    await doRequest("/auth/reset-password", tokenData, () => {
+      setSubmitDone(true);  
+      setTimeout(() => setSubmitDone(false), 2000);
+      setActiveTab("login");
+    });
+  }
+};
+
   return (
     <div className="login-page">
+      <TickingSuccess 
+        isVisible={submitDone}
+        message="Successful"
+      />
       <div className="login-container">
         <div className="login-header">
-          <button className="back-button" onClick={onBack}>
+          <button className="back-button" onClick={() => navigate("/")}>
             <svg
               width="24"
               height="24"
@@ -346,10 +162,43 @@ const Login = ({ onBack }) => {
           </div>
 
           <div className="auth-form-container">
-            {activeTab === "login" && renderLoginForm()}
-            {activeTab === "register" && renderRegisterForm()}
-            {activeTab === "forgot" && renderForgotPasswordForm()}
-            {activeTab === "otp" && renderOTPForm()}
+            {activeTab === "login" && ( <Log 
+              formData={formData}
+              handleSubmit={handleSubmit}
+              handleInputChange={handleInputChange}
+              isLoading={isLoading}
+              invalidSubmit={invalidSubmit}
+              setActiveTab={setActiveTab}
+            /> )}
+            {activeTab === "register" && ( <Register 
+              formData={formData}
+              handleSubmit={handleSubmit}
+              handleInputChange={handleInputChange}
+              isLoading={isLoading}
+            /> )}
+            {activeTab === "forgot" && ( <Forgot 
+              formData={formData}
+              handleSubmit={handleSubmit}
+              handleInputChange={handleInputChange}
+              isLoading={isLoading}
+              setActiveTab={setActiveTab}
+            /> )}
+            {activeTab === "otp" && ( <OTP 
+              formData={formData}
+              handleSubmit={handleSubmit}
+              handleInputChange={handleInputChange}
+              isLoading={isLoading}
+              invalidSubmit={invalidSubmit}
+              setActiveTab={setActiveTab}
+            /> )}
+            {activeTab === "reset" && ( <Reset 
+              formData={formData}
+              handleSubmit={handleSubmit}
+              handleInputChange={handleInputChange}
+              isLoading={isLoading}
+              invalidSubmit={invalidSubmit}
+              setActiveTab={setActiveTab}
+            /> )}
           </div>
 
           {activeTab === "login" && (

@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import react from '../assets/react.svg';
-const Navbar = ({ onLoginClick }) => {
+const Navbar = ({ isLoggedIn }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const profileRef = useRef(null);
-
+  const navigate = useNavigate();
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -27,9 +28,7 @@ const Navbar = ({ onLoginClick }) => {
 
   const handleLogin = () => {
     setIsDropdownOpen(false);
-    if (onLoginClick) {
-      onLoginClick();
-    }
+    navigate("/login");
   };
 
   return (

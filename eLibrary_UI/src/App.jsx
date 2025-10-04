@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Navbar from './components/Navbar'
 import CategoryBar from './components/CategoryBar'
@@ -6,24 +7,10 @@ import BookSlider from './components/BookSlider'
 import BookGrid from './components/BookGrid'
 import Login from './components/Login'
 
-function App() {
-  const [currentPage, setCurrentPage] = useState('home');
-
-  const navigateToLogin = () => {
-    setCurrentPage('login');
-  };
-
-  const navigateToHome = () => {
-    setCurrentPage('home');
-  };
-
-  if (currentPage === 'login') {
-    return <Login onBack={navigateToHome} />;
-  }
-
+const Home = () => {
   return (
     <div className="app">
-      <Navbar onLoginClick={navigateToLogin} />
+      <Navbar />
       <CategoryBar />
       <BookSlider />
       <BookGrid />
@@ -34,6 +21,17 @@ function App() {
         </div>
       </main>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
