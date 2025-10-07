@@ -37,6 +37,6 @@ public class Book {
     @Column(length = 1000)
     String coverUrl;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
     Set<Category> categories;
 }

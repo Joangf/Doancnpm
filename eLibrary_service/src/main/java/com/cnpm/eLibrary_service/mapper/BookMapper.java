@@ -17,11 +17,13 @@ import java.util.stream.Collectors;
 )
 public interface BookMapper {
     Book toBook(BookRequest request);
+
+    @org.mapstruct.Mapping(target = "categories", expression = "java(mapCategories(book.getCategories()))")
     BookResponse toBookResponse(Book book);
 
     void updateBook(BookRequest request, @MappingTarget Book book);
 
-    default Set<CategoryResponse> toCategoryResponses(Set<Category> categories) {
+    default Set<CategoryResponse> mapCategories(Set<Category> categories) {
         return categories.stream()
                 .map(category -> new CategoryResponse(category.getId(), category.getName()))
                 .collect(Collectors.toSet());

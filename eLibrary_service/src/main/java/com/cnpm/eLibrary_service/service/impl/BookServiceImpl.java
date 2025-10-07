@@ -1,7 +1,10 @@
 package com.cnpm.eLibrary_service.service.impl;
 
+import com.cnpm.eLibrary_service.dto.request.BookFilterRequest;
 import com.cnpm.eLibrary_service.dto.request.BookRequest;
+import com.cnpm.eLibrary_service.dto.request.BookSearchingRequest;
 import com.cnpm.eLibrary_service.dto.response.BookResponse;
+import com.cnpm.eLibrary_service.es_document.BookEs;
 import com.cnpm.eLibrary_service.es_mapper.BookEsMapper;
 import com.cnpm.eLibrary_service.es_repository.BookEsRepository;
 import com.cnpm.eLibrary_service.exception.AppException;
@@ -96,6 +99,7 @@ public class BookServiceImpl implements BookService {
                 throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
             }
             book.setCategories(categories);
+
         }
 
         Book updatedBook = bookRepository.save(book);
@@ -115,4 +119,48 @@ public class BookServiceImpl implements BookService {
 
         bookEsRepository.deleteById(book.getId().toString());
     }
+
+    @Override
+    public Page<BookResponse> search(BookSearchingRequest request, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BookEs> results;
+
+        if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()) {
+            results = bookEsRepository.searchByKeywordAndCategories(
+                    request.getKeyword(),
+                    request.getCategoryIds(),
+                    pageable
+            );
+        } else {
+            results = bookEsRepository.searchByKeyword(
+                    request.getKeyword(),
+                    pageable
+            );
+        }
+
+        return results.map(bookEsMapper::toBookResponse);
+    }
+
+    @Override
+    public Page<BookResponse> filterBooks(BookFilterRequest request, int page, int size) {
+        List<Long> categoryIds = request.getCategoryIds();
+
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
+        }
+
+
+        List<Category> categories = categoryRepository.findAllById(categoryIds);
+        if (categories.isEmpty() || categories.size() != categoryIds.size())
+            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
+
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<Book> books = bookRepository.findDistinctByCategoriesIn(categories, pageable);
+
+        return books.map(bookMapper::toBookResponse);
+    }
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.cnpm.eLibrary_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,12 +19,4 @@ public class Category {
     Long id;
 
     String name;
-
-    @ManyToMany
-    @JoinTable(
-            name = "books_categories",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    Set<Book> books;
 }

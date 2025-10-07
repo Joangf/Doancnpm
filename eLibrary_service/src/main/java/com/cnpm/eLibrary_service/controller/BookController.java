@@ -1,6 +1,8 @@
 package com.cnpm.eLibrary_service.controller;
 
+import com.cnpm.eLibrary_service.dto.request.BookFilterRequest;
 import com.cnpm.eLibrary_service.dto.request.BookRequest;
+import com.cnpm.eLibrary_service.dto.request.BookSearchingRequest;
 import com.cnpm.eLibrary_service.dto.response.ApiResponse;
 import com.cnpm.eLibrary_service.dto.response.BookResponse;
 import com.cnpm.eLibrary_service.service.BookService;
@@ -53,6 +55,28 @@ public class BookController {
         bookService.deleteBook(id);
         return ApiResponse.<String>builder()
                 .result("Book has been deleted successfully")
+                .build();
+    }
+
+    @PostMapping("/search")
+    public ApiResponse<Page<BookResponse>> search(
+            @RequestBody BookSearchingRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ApiResponse.<Page<BookResponse>>builder()
+                .result(bookService.search(request,page,size))
+                .build();
+    }
+
+    @PostMapping("/filter")
+    public  ApiResponse<Page<BookResponse>> filter(
+            @RequestBody BookFilterRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ApiResponse.<Page<BookResponse>>builder()
+                .result(bookService.filterBooks(request,page,size))
                 .build();
     }
 }
