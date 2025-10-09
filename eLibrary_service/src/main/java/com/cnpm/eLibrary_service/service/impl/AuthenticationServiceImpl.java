@@ -91,6 +91,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = generateToken(user);
 
         return AuthenticationResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .role(user.getRole())
                 .token(token)
                 .authenticated(isAuthenticated)
                 .build();
