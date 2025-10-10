@@ -9,7 +9,7 @@ import OTP from "./AuthForm/OTP.JSX";
 import Forgot from "./AuthForm/Forgot";
 import Reset from "./AuthForm/Reset";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
-const Login = () => {
+const Login = ({setIsLoggedIn}) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -73,7 +73,13 @@ const handleSubmit = async (e) => {
     const loginData = {identifier: formData.email,password: formData.password,}
     console.log("Login attempt:", loginData);
 
-    await doRequest("/auth/login", loginData, () => {
+    await doRequest("/auth/login", loginData, async (response) => {
+      const responseData = await response.json();
+      localStorage.setItem('authToken', responseData.result.token);
+      localStorage.setItem('idUser', responseData.result.id);
+      setIsLoggedIn(true);
+      sessionStorage.setItem('isLoggedIn', 'true');
+      navigate("/");
       alert("Successful login");
     });
     

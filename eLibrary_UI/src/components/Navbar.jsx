@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import react from '../assets/react.svg';
-const Navbar = ({ isLoggedIn }) => {
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const profileRef = useRef(null);
@@ -31,17 +32,43 @@ const Navbar = ({ isLoggedIn }) => {
     navigate("/login");
   };
 
+  const handleProfile = () => {
+    setIsDropdownOpen(false);
+    navigate("/profile");
+  };
+
+  const handleLogout = async () => {
+    
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(`${API_URL}/auth/logout`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(token),
+    });
+    if (response.ok) {
+      console.log("Logged out successfully");
+      setIsDropdownOpen(false);
+      setIsLoggedIn(false);
+      sessionStorage.setItem('isLoggedIn', 'false');
+      navigate("/");
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-content">
         {/* Logo Section */}
-        <div className="logo-section">
+        <button
+          type="button"
+          className="logo-section logo-navigation-button"
+          onClick={() => navigate('/')}
+        >
           <img src={react} alt="" />
           <div className="logo-text">
             <span className="logo-keazon">KeazoN</span>
             <span className="logo-books">BOOKS</span>
           </div>
-        </div>
+        </button>
 
         {/* Search Section */}
         <div className="search-section">
@@ -78,41 +105,60 @@ const Navbar = ({ isLoggedIn }) => {
             </svg>
           </button>
 
-          <div className="profile-wrapper">
-            <div
-              ref={profileRef}
-              className="profile-section"
-              onClick={toggleDropdown}
-            >
-              <img
-                src="https://api.builder.io/api/v1/image/assets/TEMP/65983b08146a39a914e0be0cc6a694b11dd0e01c?width=100"
-                alt="Profile"
-                className="profile-image"
-              />
-              <svg
-                className={`dropdown-arrow ${isDropdownOpen ? 'open' : ''}`}
-                width="16"
-                height="9"
-                viewBox="0 0 16 9"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M7.29289 8.70714C7.68342 9.09766 8.31658 9.09766 8.70711 8.70714L15.0711 2.34318C15.4616 1.95265 15.4616 1.31949 15.0711 0.928963C14.6805 0.538438 14.0474 0.538438 13.6569 0.928963L8 6.58582L2.34315 0.928963C1.95262 0.538438 1.31946 0.538438 0.928932 0.928963C0.538408 1.31949 0.538408 1.95265 0.928932 2.34318L7.29289 8.70714ZM7 7.00003V8.00003H9V7.00003H7Z" fill="#C3BEBE"/>
-              </svg>
-            </div>
-
-            {isDropdownOpen && (
-              <div ref={dropdownRef} className="profile-dropdown">
-                <button className="dropdown-item login-item" onClick={handleLogin}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="currentColor"/>
-                    <path d="M12 14C8.13401 14 5 17.134 5 21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21C19 17.134 15.866 14 12 14Z" fill="currentColor"/>
+          {isLoggedIn  
+            ?(
+              <div className="profile-wrapper">
+                <div
+                  ref={profileRef}
+                  className="profile-section"
+                  onClick={toggleDropdown}
+                >
+                  <img
+                    src="https://api.builder.io/api/v1/image/assets/TEMP/21e8c4ad58b36ddd2a9af3f8fa0325468a156350?width=100"
+                    alt="Profile"
+                    className="profile-image"
+                  />
+                  <svg
+                    className={`dropdown-arrow ${isDropdownOpen ? 'open' : ''}`}
+                    width="16"
+                    height="9"
+                    viewBox="0 0 16 9"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M7.29289 8.70714C7.68342 9.09766 8.31658 9.09766 8.70711 8.70714L15.0711 2.34318C15.4616 1.95265 15.4616 1.31949 15.0711 0.928963C14.6805 0.538438 14.0474 0.538438 13.6569 0.928963L8 6.58582L2.34315 0.928963C1.95262 0.538438 1.31946 0.538438 0.928932 0.928963C0.538408 1.31949 0.538408 1.95265 0.928932 2.34318L7.29289 8.70714ZM7 7.00003V8.00003H9V7.00003H7Z" fill="#C3BEBE"/>
                   </svg>
-                  Login
-                </button>
+                </div>
+
+                {isDropdownOpen && (
+                  <div ref={dropdownRef} className="profile-dropdown">
+                    <button className="dropdown-item" onClick={handleProfile}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="currentColor"/>
+                        <path d="M12 14C8.13401 14 5 17.134 5 21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21C19 17.134 15.866 14 12 14Z" fill="currentColor"/>
+                      </svg>
+                      Profile
+                    </button>
+                    <button className="dropdown-item login-item" onClick={handleLogout}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            )
+            :(
+              <button className="dropdown-item login-item" onClick={handleLogin}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Login
+              </button>
+            )
+          }
+          
         </div>
       </div>
     </nav>

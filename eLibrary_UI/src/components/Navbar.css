@@ -29,6 +29,18 @@
   gap: 12px;
 }
 
+.logo-navigation-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.logo-navigation-button:focus,
+.logo-navigation-button:focus-visible {
+  outline: none;
+}
+
 .logo-icon {
   width: 64px;
   height: 40px;
@@ -189,6 +201,7 @@
   z-index: 1001;
   min-width: 160px;
   animation: dropdownFadeIn 0.2s ease-out;
+  padding: 4px;
 }
 
 @keyframes dropdownFadeIn {
@@ -218,20 +231,13 @@
   gap: 10px;
   transition: background-color 0.2s ease;
   border-radius: 6px;
-  margin: 4px;
 }
 
 .dropdown-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.dropdown-item:first-child {
-  margin-top: 4px;
-}
 
-.dropdown-item:last-child {
-  margin-bottom: 4px;
-}
 
 .login-item svg {
   width: 20px;
