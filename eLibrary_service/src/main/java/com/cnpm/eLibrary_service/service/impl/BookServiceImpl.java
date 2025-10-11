@@ -15,12 +15,15 @@ import com.cnpm.eLibrary_service.entity.Category;
 import com.cnpm.eLibrary_service.repository.BookRepository;
 import com.cnpm.eLibrary_service.repository.CategoryRepository;
 import com.cnpm.eLibrary_service.service.BookService;
+import com.cnpm.eLibrary_service.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,6 +36,7 @@ public class BookServiceImpl implements BookService {
     private final CategoryRepository categoryRepository; // thêm repo cho category
     private final BookMapper bookMapper;
     private final BookEsMapper bookEsMapper;
+    private final FileService fileService;
 
     @Override
     public BookResponse createBook(BookRequest request) {
@@ -161,6 +165,16 @@ public class BookServiceImpl implements BookService {
         return books.map(bookMapper::toBookResponse);
     }
 
+    @Override
+    public String uploadCover(Long id, MultipartFile file) throws IOException {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
 
+        String coverUrl = fileService.saveFile(file, "book_covers");
+        book.setCoverUrl(coverUrl);
+        bookRepository.save(book);
+
+        return coverUrl;
+    }
 
 }

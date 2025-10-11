@@ -47,3 +47,8 @@ elasticsearch/
 data/
 logs/
 
+uploads/
+tmp/
+*.log
+
+

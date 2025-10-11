@@ -19,6 +19,7 @@ public class BookResponse {
     Integer publishYear;
     String description;
     String pdfUrl;
+    String coverUrl;
 
     Set<CategoryResponse> categories;
 }

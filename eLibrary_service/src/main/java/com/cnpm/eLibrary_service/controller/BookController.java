@@ -9,7 +9,9 @@ import com.cnpm.eLibrary_service.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -78,5 +80,16 @@ public class BookController {
         return ApiResponse.<Page<BookResponse>>builder()
                 .result(bookService.filterBooks(request,page,size))
                 .build();
+    }
+
+    @PostMapping("/upload/{id}")
+    public ApiResponse<String> uploadCover(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+            String coverUrl = bookService.uploadCover(id, file);
+            return ApiResponse.<String>builder()
+                    .result(coverUrl)
+                    .build();
     }
 }
