@@ -20,5 +20,8 @@ public interface AuthenticationService {
     AuthenticationResponse refreshToken(RefreshTokenRequest request)
             throws ParseException, JOSEException;
     void forgotPassword(ForgotPasswordRequest request);
+
+    void forgotPasswordWithLink(ForgotPasswordRequest request);
+
     ResetPasswordResponse resetPassword(ResetPasswordRequest request);
 }

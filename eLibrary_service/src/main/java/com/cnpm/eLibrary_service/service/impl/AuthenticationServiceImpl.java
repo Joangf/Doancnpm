@@ -49,6 +49,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.refreshable-duration}")
     protected long REFRESHABLE_DURATION;
 
+    @Value("${frontend.base-url}")
+    private String frontendBaseUrl;
+
     @Override
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
@@ -160,6 +163,35 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String body = "Xin chào,\n\nToken của bạn là: " + token
                 + "\nMã này sẽ hết hạn sau 5 phút.\n\nTrân trọng,\neLibrary Team";
         mailService.sendEmail(user.getEmail(), subject,body);
+    }
+
+    @Override
+    public void forgotPasswordWithLink(ForgotPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_EMAIL_NOT_EXISTED));
+
+        String token = UUID.randomUUID().toString();
+        redisService.setValue("RESET:" + token, user.getUsername(), 5L, TimeUnit.MINUTES);
+
+        // 🔗 Link reset
+        String resetLink = frontendBaseUrl + "/reset-password?token=" + token;
+
+        String subject = "Đổi mật khẩu eLibrary";
+        String body = String.format("""
+            Xin chào %s,
+
+            Bạn đã yêu cầu đổi mật khẩu cho tài khoản eLibrary.
+            Vui lòng nhấn vào đường link dưới đây để đặt lại mật khẩu:
+
+            %s
+
+            (Liên kết này chỉ có hiệu lực trong 5 phút.)
+
+            Trân trọng,
+            eLibrary Team
+            """, user.getFirstName(), resetLink);
+
+        mailService.sendEmail(user.getEmail(), subject, body);
     }
 
     @Override

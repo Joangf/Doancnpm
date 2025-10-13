@@ -53,6 +53,14 @@ public class AuthenticationController {
                 .build();
     }
 
+    @PostMapping("/forgot-password-link")
+    public ApiResponse<String> forgotPasswordWithLink(@RequestBody ForgotPasswordRequest request) {
+        authenticationService.forgotPasswordWithLink(request);
+        return ApiResponse.<String>builder()
+                .result("Email reset mật khẩu đã được gửi (nếu email tồn tại)")
+                .build();
+    }
+
     @PostMapping("/reset-password")
     public ApiResponse<ResetPasswordResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
         return ApiResponse.<ResetPasswordResponse>builder()
