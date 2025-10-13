@@ -1,6 +1,8 @@
 package com.cnpm.eLibrary_service.controller;
 
 import com.cnpm.eLibrary_service.dto.request.CreateUserRequest;
+import com.cnpm.eLibrary_service.dto.request.ResendEmailRequest;
+import com.cnpm.eLibrary_service.dto.request.UpdateEmailRequest;
 import com.cnpm.eLibrary_service.dto.request.UpdateUserRequest;
 import com.cnpm.eLibrary_service.dto.response.ApiResponse;
 import com.cnpm.eLibrary_service.dto.response.UserResponse;
@@ -52,6 +54,25 @@ public class UserController {
         userService.deleteUser(id);
         return ApiResponse.<String>builder()
                 .result("User has been deleted successfully")
+                .build();
+    }
+
+    @PutMapping("/{userId}/email")
+    public ApiResponse<UserResponse> updateEmailBeforeVerification(
+            @PathVariable String userId,
+            @RequestBody UpdateEmailRequest request
+    ) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateEmailBeforeVerification(userId,request))
+                .build();
+    }
+
+    @PostMapping("/resend")
+    public ApiResponse<String> resendVerificationOtp(@RequestBody ResendEmailRequest request){
+        userService.resendVerificationOtp(request);
+
+        return ApiResponse.<String>builder()
+                .result("Resent otp code")
                 .build();
     }
 }

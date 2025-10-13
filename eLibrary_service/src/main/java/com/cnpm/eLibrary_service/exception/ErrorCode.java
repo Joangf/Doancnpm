@@ -28,7 +28,10 @@ public enum ErrorCode {
     ALREADY_BORROWED(1017, "This book has already been borrowed by this user", HttpStatus.BAD_REQUEST),
     BOOK_MUST_HAVE_CATEGORY(1018, "Book must belong to at least one category", HttpStatus.BAD_REQUEST),
     USERNAME_EXISTED(1019, "Username existed", HttpStatus.BAD_REQUEST),
-    EMAIL_EXISTED(1020, "Email existed", HttpStatus.BAD_REQUEST)
+    EMAIL_EXISTED(1020, "Email existed", HttpStatus.BAD_REQUEST),
+    CANNOT_CHANGE_EMAIL_AFTER_VERIFICATION(1021, "Cannot change email after verification", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_EXISTED(1022, "Email not existed", HttpStatus.BAD_REQUEST),
+    ALREADY_VERIFIED(1023, "User already verified", HttpStatus.BAD_REQUEST)
 ;
     ErrorCode(int code, String message, HttpStatus statusCode) {
         this.code = code;

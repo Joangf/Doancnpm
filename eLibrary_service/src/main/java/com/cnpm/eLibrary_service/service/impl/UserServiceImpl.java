@@ -1,6 +1,8 @@
 package com.cnpm.eLibrary_service.service.impl;
 
 import com.cnpm.eLibrary_service.dto.request.CreateUserRequest;
+import com.cnpm.eLibrary_service.dto.request.ResendEmailRequest;
+import com.cnpm.eLibrary_service.dto.request.UpdateEmailRequest;
 import com.cnpm.eLibrary_service.dto.request.UpdateUserRequest;
 import com.cnpm.eLibrary_service.dto.response.UserResponse;
 import com.cnpm.eLibrary_service.exception.AppException;
@@ -23,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -105,4 +106,41 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
     }
+
+    @Override
+    public UserResponse updateEmailBeforeVerification(String userId, UpdateEmailRequest request){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_EXISTED));
+
+        if (user.isVerified()) {
+            throw new AppException(ErrorCode.CANNOT_CHANGE_EMAIL_AFTER_VERIFICATION);
+        }
+
+        // Check trùng email
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+
+        user.setEmail(request.getEmail());
+        userRepository.save(user);
+
+        // Gửi lại OTP tới email mới
+        verificationService.sendVerificationOtp(request.getEmail());
+
+        return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public void resendVerificationOtp(ResendEmailRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXISTED));
+
+        if (user.isVerified()) {
+            throw new AppException(ErrorCode.ALREADY_VERIFIED);
+        }
+
+        verificationService.sendVerificationOtp(request.getEmail());
+    }
+
+
 }

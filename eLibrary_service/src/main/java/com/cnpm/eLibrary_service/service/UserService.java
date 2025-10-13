@@ -1,11 +1,11 @@
 package com.cnpm.eLibrary_service.service;
 
 import com.cnpm.eLibrary_service.dto.request.CreateUserRequest;
+import com.cnpm.eLibrary_service.dto.request.ResendEmailRequest;
+import com.cnpm.eLibrary_service.dto.request.UpdateEmailRequest;
 import com.cnpm.eLibrary_service.dto.request.UpdateUserRequest;
 import com.cnpm.eLibrary_service.dto.response.UserResponse;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public interface UserService {
     UserResponse createUser(CreateUserRequest request);
@@ -18,4 +18,7 @@ public interface UserService {
 
     void deleteUser(String id);
 
+    UserResponse updateEmailBeforeVerification(String userId, UpdateEmailRequest request);
+
+    void resendVerificationOtp(ResendEmailRequest request);
 }
