@@ -38,19 +38,22 @@ const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
   };
 
   const handleLogout = async () => {
-    
-    const token = localStorage.getItem('authToken');
-    const response = await fetch(`${API_URL}/auth/logout`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(token),
-    });
-    if (response.ok) {
-      console.log("Logged out successfully");
-      setIsDropdownOpen(false);
-      setIsLoggedIn(false);
-      sessionStorage.setItem('isLoggedIn', 'false');
-      navigate("/");
+    try{
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`${API_URL}/auth/logout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(token),
+      });
+      if (response.ok) {
+        console.log("Logged out successfully");
+        setIsDropdownOpen(false);
+        setIsLoggedIn(false);
+        sessionStorage.setItem('isLoggedIn', 'false');
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
     }
   };
 

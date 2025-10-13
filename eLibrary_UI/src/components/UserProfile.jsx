@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserProfile.css';
-import Navbar from './Navbar';
+import Navbar from "./Navbar";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 const UserProfile = ({isLoggedIn, setIsLoggedIn}) => {
   const navigate = useNavigate();
-
+  const [activeDelete, setActiveDelete] = useState(false);
   const [formData, setFormData] = useState({
     userName: "",
     firstName: "",
@@ -68,6 +68,28 @@ const UserProfile = ({isLoggedIn, setIsLoggedIn}) => {
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
+    }
+  };
+
+  const handleDeleteAcc = async () => {
+    try{
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`${API_URL}/auth/logout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(token),
+      });
+      if (response.ok) {
+        const resDel = await fetch(`${API_URL}/user${id}`, {
+          method: "DELETE",
+        });
+        if (resDel.ok) {
+          setIsLoggedIn(false);
+          navigate('/');
+        }
+      }
+    } catch (error) {
+      console.error("Delete account failed:", error);
     }
   };
 
@@ -319,6 +341,10 @@ const UserProfile = ({isLoggedIn, setIsLoggedIn}) => {
                 <button type="submit" className="save-button">
                   Save Changes
                 </button>
+
+                <button type="button" className="delete-acc-button" onClick={() => setActiveDelete(true)}>
+                  Delete Account
+                </button>
               </div>
             </form>
 
@@ -341,6 +367,23 @@ const UserProfile = ({isLoggedIn, setIsLoggedIn}) => {
           </div>
         </main>
       </div>
+
+      {activeDelete && (
+        <div className="confirm-container">
+          <div className="confirm">
+            <h1>Confirm delete your account</h1>
+            <p>Are you sure you want to delete your account?</p>
+            <div className="button-group">
+              <button type="button" className="cancel-button" onClick={() => setActiveDelete(false)}>
+                No, take me back
+              </button>
+              <button type="button" className="ok-button" onClick={handleDeleteAcc}>
+                Yes, I'm sure
+              </button>
+            </div>
+          </div>
+        </div>
+      )};
     </div>
   );
 };
