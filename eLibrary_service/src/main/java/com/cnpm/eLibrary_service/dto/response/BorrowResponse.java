@@ -15,6 +15,12 @@ public class BorrowResponse {
     String userId;
     Long bookId;
     String bookTitle;
+    String bookAuthor;
+    String bookPublisher;
+    Integer bookPublishYear;
+    String bookDescription;
+    String bookPdfUrl;
+    String bookCoverUrl;
     LocalDateTime borrowDateTime;
     LocalDateTime dueDateTime;
     LocalDateTime returnDateTime;
