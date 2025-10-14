@@ -1,58 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round:wght@400&family=Roboto:wght@100;300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
 
-.navbar {
+/* Main Navbar Styling */
+.navbar.industrial-theme {
   width: 100%;
   height: 80px;
-  background: #292828;
+  background: #1A1A1A; /* Consistent dark background */
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
+  border-bottom: 1px solid #333; /* Border to separate from CategoryBar */
+  font-family: 'Roboto', sans-serif;
 }
 
 .navbar-content {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
-  max-width: 1920px;
+  max-width: 1400px; /* Consistent max-width */
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  position: relative;
+
 }
 
 /* Logo Section */
 .logo-section {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
+  text-decoration: none;
 }
-
 .logo-navigation-button {
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
-}
-
-.logo-navigation-button:focus,
-.logo-navigation-button:focus-visible {
-  outline: none;
-}
-
-.logo-icon {
-  width: 64px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(90deg);
-}
-
-.logo-icon svg {
-  width: 64px;
-  height: 40px;
+  padding: 0;
 }
 
 .logo-text {
@@ -62,41 +46,49 @@
 }
 
 .logo-keazon {
-  font-family: 'Varela Round', -apple-system, Roboto, Helvetica, sans-serif;
-  font-weight: 400;
-  font-size: 35px;
-  color: #ffffff;
-  margin-bottom: -5px;
+  font-weight: 900;
+  font-size: 28px;
+  color: #FFD700; /* Gold accent for brand */
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .logo-books {
-  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
   font-weight: 400;
-  font-size: 20px;
-  color: #ffffff;
+  font-size: 14px;
+  color: #A0A0A0; /* Muted gray for subtitle */
+  text-transform: uppercase;
+  letter-spacing: 3.5px; /* Wider spacing */
+  padding-left: 2px;
 }
 
 /* Search Section */
 .search-section {
   flex: 1;
-  max-width: 678px;
+  max-width: 550px;
   margin: 0 40px;
+  position: relative;
 }
 
 .search-container {
   width: 100%;
-  height: 33px;
-  background: #373737;
-  border-radius: 4px;
+  height: 40px; /* Taller search bar */
+  background: #242424; /* Darker panel background */
+  border: 1px solid #333;
+  border-radius: 5px; /* Sharp corners */
   display: flex;
   align-items: center;
+  gap: 10px;
   padding: 0 12px;
-  gap: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+.search-container:focus-within {
+  border-color: #2D6A9E; /* Steel blue on focus */
+  box-shadow: 0 0 0 3px rgba(45, 106, 158, 0.5);
 }
 
 .search-icon {
-  width: 26px;
-  height: 26px;
   flex-shrink: 0;
 }
 
@@ -105,218 +97,175 @@
   background: transparent;
   border: none;
   outline: none;
-  color: #808080;
-  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
-  font-weight: 400;
-  font-size: 17px;
-  line-height: normal;
+  color: #E0E0E0; /* Brighter text color */
+  font-size: 15px;
+  height: 100%;
 }
-
 .search-input::placeholder {
-  color: #808080;
-  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
-  font-weight: 400;
-  font-size: 17px;
+  color: #888;
+  font-size: 15px;
 }
 
-/* Actions Section */
+/* Search Dropdown */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #242424; /* Consistent panel color */
+  border: 1px solid #333;
+  border-radius: 8px; /* Consistent radius */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.search-book-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #333;
+}
+.search-book-item:last-child { border-bottom: none; }
+.search-book-item:hover { background-color: #333; }
+
+.search-book-title {
+  color: #E0E0E0;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.search-book-author { color: #A0A0A0; font-size: 13px; }
+
+/* Actions & Profile Section */
 .actions-section {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 20px;
+  gap: 12px;
 }
 
 .action-button {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   background: transparent;
+  border-radius: 20%;
   border: none;
   cursor: pointer;
-  padding: 0;
+  color: #A0A0A0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 }
-
 .action-button:hover {
-  opacity: 0.8;
+  color: #FFD700; /* Gold icon on hover */
 }
-
 .action-button svg {
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
 }
 
-/* Profile Section */
-.profile-wrapper {
-  position: relative;
+.profile-wrapper { 
+  position: relative; 
 }
 
 .profile-section {
   display: flex;
   align-items: center;
-  gap: 8px;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.profile-section:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transition: box-shadow 0.2s ease;
 }
 
 .profile-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 250px;
-  border: 2px solid #C3BEBE;
-  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #555;
+  transition: border-color 0.2s ease;
 }
-
-.dropdown-arrow {
-  width: 16px;
-  height: 9px;
-  transform: rotate(90deg);
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(270deg);
+.profile-section:hover .profile-image {
+  border-color: #FFD700;
 }
 
 /* Profile Dropdown */
 .profile-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 12px);
   right: 0;
-  margin-top: 8px;
-  background: #373737;
-  border: 1px solid #4a4a4a;
+  background: #242424;
+  border: 1px solid #333;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
   z-index: 1001;
-  min-width: 160px;
-  animation: dropdownFadeIn 0.2s ease-out;
-  padding: 4px;
-}
-
-@keyframes dropdownFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  min-width: 180px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .dropdown-item {
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 12px;
   background: transparent;
   border: none;
   text-align: left;
   cursor: pointer;
-  color: #E7E2E2;
-  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
-  font-size: 14px;
-  font-weight: 400;
+  color: #E0E0E0;
+  font-size: 15px;
+  font-weight: 700;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 5px;
+}
+.dropdown-item:hover {
+  background-color: #333;
+}
+.dropdown-item.logout-item:hover {
+  background-color: #582828; /* Reddish hover for logout */
+  color: #FFAAAA;
+}
+
+/* Login Button */
+.login-button.secondary-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  transition: background-color 0.2s ease;
-  border-radius: 6px;
+  justify-content: center;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 40px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  background: #2D6A9E; /* Steel blue */
+  color: white;
+}
+.login-button.secondary-btn:hover {
+  background: #255C8A;
+  box-shadow: 0 0 15px rgba(45, 106, 158, 0.5);
 }
 
-.dropdown-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
 
 
-
-.login-item svg {
-  width: 20px;
-  height: 20px;
-  color: #E7E2E2;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .navbar-content {
     padding: 0 15px;
   }
-  
-  .search-section {
-    max-width: 500px;
-    margin: 0 20px;
-  }
-  
+  .logo-keazon { font-size: 24px; }
+  .logo-books { font-size: 12px; letter-spacing: 2.5px; }
+  .action-button { display: none; } /* Hide action buttons on small mobile */
   .actions-section {
-    gap: 15px;
+    gap: 0;
   }
-}
 
-@media (max-width: 768px) {
-  .logo-keazon {
-    font-size: 28px;
-  }
-  
-  .logo-books {
-    font-size: 16px;
-  }
-  
-  .search-section {
-    max-width: 300px;
-    margin: 0 10px;
-  }
-  
-  .search-input {
-    font-size: 14px;
-  }
-  
-  .search-input::placeholder {
-    font-size: 14px;
-  }
-  
-  .actions-section {
-    gap: 10px;
-  }
-  
-  .action-button {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .action-button svg {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .profile-image {
-    width: 40px;
-    height: 40px;
-  }
 }
-
-@media (max-width: 480px) {
-  .search-section {
-    display: none;
-  }
-  
-  .logo-keazon {
-    font-size: 24px;
-  }
-  
-  .logo-books {
-    font-size: 14px;
-  }
-  
-  .actions-section {
-    gap: 8px;
+@media (max-width: 1465px){
+  .navbar-content {
+    padding: 0 40px;
   }
 }

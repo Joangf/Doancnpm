@@ -1,51 +1,36 @@
 import React from 'react';
 import './BookSlider.css';
-
-const BookSlider = () => {
-  const books = [
-    {
-      id: 1,
-      background: 'rgba(113, 197, 244, 0.38)',
-      title: 'Books Head',
-      genres: 'Detective-Love-History',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate magna.',
-      imageUrl: 'https://api.builder.io/api/v1/image/assets/TEMP/7a0f6f9bfe68ab4fd07f13552ec007d2607827fe?width=406'
-    },
-    {
-      id: 2,
-      background: 'rgba(171, 113, 244, 0.38)',
-      title: 'Books Head',
-      genres: 'Detective-ScienceFiction-Fantastic',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate magna.',
-      imageUrl: 'https://api.builder.io/api/v1/image/assets/TEMP/088d686adc270eed87c0e19bedffcf8c1d93af86?width=406'
-    },
-    {
-      id: 3,
-      background: 'rgba(244, 113, 168, 0.38)',
-      title: 'Books Head',
-      genres: 'Novel-History-Love',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate magna.',
-      imageUrl: 'https://api.builder.io/api/v1/image/assets/TEMP/088d686adc270eed87c0e19bedffcf8c1d93af86?width=406'
-    }
-  ];
+import { useNavigate } from 'react-router-dom';
+const BookSlider = ({books}) => {
+  const navigate = useNavigate();
+  const ArrowRightIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
+    </svg>
+  );
 
   return (
-    <div className="book-slider">
+    <div className="book-slider industrial-theme">
       <div className="book-slider-content">
+        <h2 className="slider-title">TOP RATED BOOKS</h2>
         <div className="books-container">
           {books.map((book) => (
             <div key={book.id} className="book-card">
-              <div 
-                className="book-background"
-                style={{ background: book.background }}
-              ></div>
-              <div className="book-image-placeholder"></div>
+              <img src={book.coverUrl} alt={book.title} className="book-cover" />
               <div className="book-content">
-                <h2 className="book-title">{book.title}</h2>
-                <p className="book-description">{book.description}</p>
-                <div className="book-genres">{book.genres}</div>
-                <button className="read-now-button">
-                  <span>Now Read!</span>
+                <div> {/* Wrapper for top content */}
+                  <h3 className="book-title">{book.title}</h3>
+                  <p className="book-author">by {book.author}</p>
+                  <div className="book-genres">
+                    {book.categories.map((genre) => (
+                      <span key={genre.id} className="genre-tag">{genre.name}</span>
+                    ))}
+                  </div>
+                  <p className="book-description">{book.description}</p>
+                </div>
+                <button className="view-details-button action-btn primary-btn" onClick={ () => navigate(`/book/${book.id}`)}>
+                  <span>View Details</span>
+                  <ArrowRightIcon />
                 </button>
               </div>
             </div>

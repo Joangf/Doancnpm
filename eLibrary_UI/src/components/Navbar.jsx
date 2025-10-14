@@ -1,19 +1,46 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
-import react from '../assets/react.svg';
 const API_URL = import.meta.env.VITE_BACKEND_URL;
-const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
+// A new, more geometric logo that fits the industrial theme
+const LogoIcon = () => (
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2.5L37.5 12.5V32.5L20 22.5L2.5 32.5V12.5L20 2.5Z" stroke="#FFD700" strokeWidth="2" strokeLinejoin="round"/>
+    <path d="M2.5 12.5L20 22.5L37.5 12.5" stroke="#FFD700" strokeWidth="2" strokeLinejoin="round"/>
+    <path d="M20 37.5V22.5" stroke="#FFD700" strokeWidth="2" strokeLinejoin="round"/>
+  </svg>
+);
+
+
+const Navbar = ({isLoggedIn, setIsLoggedIn, activeCategories}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const [searchResult, setSearchResult] = useState([]);
   const dropdownRef = useRef(null);
-  const profileRef = useRef(null);
+  const profileRef = useRef(null);  
+  const searchDropdownRef = useRef(null);
+  const searchInputRef = useRef(null);
   const navigate = useNavigate();
-  // Close dropdown when clicking outside
+
+  // Sample book data
+  const sampleBooks = [
+    { id: 1, title: "The Adventures of Sherlock Holmes", author: "Arthur Conan Doyle" },
+    { id: 2, title: "A Study in Scarlet", author: "Arthur Conan Doyle" },
+    { id: 3, title: "The Hound of the Baskervilles", author: "Arthur Conan Doyle" }
+  ];
+
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
           profileRef.current && !profileRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
+      }
+
+      if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target) &&
+          searchInputRef.current && !searchInputRef.current.contains(event.target)) {
+        setIsSearchDropdownOpen(false);
       }
     };
 
@@ -37,6 +64,44 @@ const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
     navigate("/profile");
   };
 
+  const handleSearchChange = async (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    setIsSearchDropdownOpen(value.length > 0);
+    try {
+      const request = {
+        keyword: value,
+        categoryIds: activeCategories.flatMap(category => Array.isArray(category.id) ? category.id : [category.id])
+      }
+      const response = await fetch(`${API_URL}/book/search`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+      });
+      const data = await response.json();
+      if(!response.ok){
+        console.log("Searching failed");
+        return;
+      }
+      setSearchResult(data.result.content);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
+  const handleSearchFocus = () => {
+    if (searchValue.length > 0) {
+      setIsSearchDropdownOpen(true);
+    }
+  };
+
+  const handleBookSelect = (book) => {
+    setSearchValue(book.title);
+    setIsSearchDropdownOpen(false);
+    navigate(`/book/${book.id}`);
+  };
+
   const handleLogout = async () => {
     try{
       const token = localStorage.getItem('authToken');
@@ -58,7 +123,7 @@ const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
   };
 
   return (
-    <nav className="navbar">
+    <nav className="navbar industrial-theme">
       <div className="navbar-content">
         {/* Logo Section */}
         <button
@@ -66,7 +131,7 @@ const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
           className="logo-section logo-navigation-button"
           onClick={() => navigate('/')}
         >
-          <img src={react} alt="" />
+          <LogoIcon />
           <div className="logo-text">
             <span className="logo-keazon">KeazoN</span>
             <span className="logo-books">BOOKS</span>
@@ -76,36 +141,43 @@ const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
         {/* Search Section */}
         <div className="search-section">
           <div className="search-container">
-            <svg className="search-icon" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M23.0953 21.6963L16.5014 15.1023C17.5246 13.7795 18.0781 12.1621 18.0781 10.4609C18.0781 8.42461 17.2834 6.51523 15.8463 5.07559C14.4092 3.63594 12.4947 2.84375 10.4609 2.84375C8.42715 2.84375 6.51269 3.63848 5.07559 5.07559C3.63594 6.51269 2.84375 8.42461 2.84375 10.4609C2.84375 12.4947 3.63848 14.4092 5.07559 15.8463C6.51269 17.2859 8.42461 18.0781 10.4609 18.0781C12.1621 18.0781 13.777 17.5246 15.0998 16.5039L21.6937 23.0953C21.7131 23.1147 21.736 23.13 21.7613 23.1405C21.7866 23.1509 21.8137 23.1563 21.841 23.1563C21.8684 23.1563 21.8954 23.1509 21.9207 23.1405C21.946 23.13 21.9689 23.1147 21.9883 23.0953L23.0953 21.9908C23.1147 21.9715 23.13 21.9485 23.1405 21.9233C23.1509 21.898 23.1563 21.8709 23.1563 21.8436C23.1563 21.8162 23.1509 21.7891 23.1405 21.7638C23.13 21.7386 23.1147 21.7156 23.0953 21.6963ZM14.4828 14.4828C13.4062 15.5568 11.9793 16.1484 10.4609 16.1484C8.94258 16.1484 7.51562 15.5568 6.43906 14.4828C5.36504 13.4062 4.77344 11.9793 4.77344 10.4609C4.77344 8.94258 5.36504 7.51309 6.43906 6.43906C7.51562 5.36504 8.94258 4.77344 10.4609 4.77344C11.9793 4.77344 13.4088 5.3625 14.4828 6.43906C15.5568 7.51562 16.1484 8.94258 16.1484 10.4609C16.1484 11.9793 15.5568 13.4088 14.4828 14.4828Z" fill="#808080"/>
+            <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="#888"/>
             </svg>
-            <input 
-              type="text" 
-              className="search-input" 
-              placeholder="Search for the book you want and read it now... Sherlock Holmes, Harry Pot..."
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="search-input"
+              placeholder="Search for books by title or author..."
+              value={searchValue}
+              onChange={handleSearchChange}
+              onFocus={handleSearchFocus}
             />
           </div>
+
+          {isSearchDropdownOpen && (
+            <div ref={searchDropdownRef} className="search-dropdown">
+              {searchResult.map((book) => (
+                <div
+                  key={book.id}
+                  className="search-book-item"
+                  onClick={() => handleBookSelect(book)}
+                >
+                  <div className="search-book-title">{book.title}</div>
+                  <div className="search-book-author">by {book.author}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Actions Section */}
+        {/* Actions & Profile Section */}
         <div className="actions-section">
-          <button className="action-button">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 13.3333V31.6667C5 35.335 7.99 36.6667 10 36.6667H35V33.3333H10.02C9.25 33.3133 8.33333 33.01 8.33333 31.6667C8.33333 30.3233 9.25 30.02 10.02 30H35V6.66668C35 4.82834 33.505 3.33334 31.6667 3.33334H10C7.99 3.33334 5 4.66501 5 8.33334V13.3333ZM10 6.66668H31.6667V26.6667H8.33333V8.33334C8.33333 6.99001 9.25 6.68668 10 6.66668Z" fill="#E7E2E2" fillOpacity="0.81"/>
-              <path d="M19.995 23.3333L25.5783 17.8517C25.9226 17.5206 26.1964 17.1234 26.3835 16.684C26.5706 16.2445 26.667 15.7718 26.667 15.2942C26.667 14.8165 26.5706 14.3438 26.3835 13.9044C26.1964 13.4649 25.9226 13.0677 25.5783 12.7367C24.8843 12.0517 23.9484 11.6676 22.9733 11.6676C21.9982 11.6676 21.0623 12.0517 20.3683 12.7367L19.995 13.1L19.6217 12.735C18.9279 12.0501 17.9923 11.6661 17.0175 11.6661C16.0427 11.6661 15.1071 12.0501 14.4133 12.735C14.0691 13.0661 13.7952 13.4632 13.6081 13.9027C13.4211 14.3422 13.3246 14.8149 13.3246 15.2925C13.3246 15.7701 13.4211 16.2428 13.6081 16.6823C13.7952 17.1217 14.0691 17.5189 14.4133 17.85L19.995 23.3333Z" fill="#E7E2E2" fillOpacity="0.81"/>
-            </svg>
+          <button className="action-button" title="My Library">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6H2V20C2 21.1 2.9 22 4 22H18V20H4V6Z" fill="currentColor"/><path d="M20 2H8C6.9 2 6 2.9 6 4V16C6 17.1 6.9 18 8 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="currentColor"/></svg>
           </button>
-
-          <button className="action-button">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M32.15 28.8167L30 26.6667V18.3333C30 13.2167 27.2667 8.93332 22.5 7.79999V6.66666C22.5 5.28332 21.3834 4.16666 20 4.16666C18.6167 4.16666 17.5 5.28332 17.5 6.66666V7.79999C12.7167 8.93332 10 13.2 10 18.3333V26.6667L7.85002 28.8167C6.80002 29.8667 7.53336 31.6667 9.01669 31.6667H30.9667C32.4667 31.6667 33.2 29.8667 32.15 28.8167ZM26.6667 28.3333H13.3334V18.3333C13.3334 14.2 15.85 10.8333 20 10.8333C24.15 10.8333 26.6667 14.2 26.6667 18.3333V28.3333ZM20 36.6667C21.8334 36.6667 23.3334 35.1667 23.3334 33.3333H16.6667C16.6667 34.2174 17.0179 35.0652 17.643 35.6903C18.2681 36.3155 19.116 36.6667 20 36.6667Z" fill="#E7E2E2" fillOpacity="0.81"/>
-            </svg>
-          </button>
-
-          <button className="action-button">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10.142 6.486C10.2309 6.33776 10.3566 6.21507 10.507 6.12989C10.6573 6.04472 10.8272 5.99996 11 6H29C29.1728 5.99996 29.3427 6.04472 29.4931 6.12989C29.6435 6.21507 29.7692 6.33776 29.858 6.486L35.858 16.486C35.9645 16.6639 36.0131 16.8706 35.997 17.0773C35.9808 17.2841 35.9008 17.4807 35.768 17.64L34.954 18.616C34.4047 17.8086 33.6659 17.148 32.8023 16.692C31.9387 16.236 30.9766 15.9984 30 16H33.234L28.434 8H24.476L27.676 16H30C28.222 16 26.626 16.772 25.528 18H14.46L20 32.24L20.06 32.086L20.08 32.26C20.2164 33.3213 20.5487 34.3481 21.06 35.288L20.768 35.64C20.6742 35.7525 20.5567 35.8431 20.424 35.9052C20.2913 35.9673 20.1466 35.9995 20 35.9995C19.8535 35.9995 19.7087 35.9673 19.576 35.9052C19.4433 35.8431 19.3259 35.7525 19.232 35.64L4.23203 17.64C4.09922 17.4807 4.01921 17.2841 4.00309 17.0773C3.98696 16.8706 4.03552 16.6639 4.14203 16.486L10.142 6.486ZM11.566 8L6.76603 16H12.324L15.524 8H11.566ZM16.85 29.658L12.316 18H7.13603L16.85 29.658ZM17.678 8L14.478 16H25.522L22.322 8H17.68H17.678ZM22.472 33.596C22.2714 33.0827 22.1344 32.5467 22.064 32C22.0209 31.6684 21.9995 31.3344 22 31C22 30.2044 22.3161 29.4413 22.8787 28.8787C23.4413 28.3161 24.2044 28 25 28H35C35.7957 28 36.5587 28.3161 37.1213 28.8787C37.684 29.4413 38 30.2044 38 31C38 33.232 37.082 35.02 35.576 36.23C34.094 37.42 32.106 38 30 38C27.894 38 25.906 37.42 24.424 36.23C23.5542 35.5378 22.8812 34.6296 22.472 33.596ZM27.262 19.084C27.98 18.412 28.942 18 30 18C30.8125 17.9984 31.6061 18.2454 32.274 18.708C32.8056 19.0772 33.2401 19.5693 33.5406 20.1424C33.8411 20.7156 33.9987 21.3528 34 22C34 23.0609 33.5786 24.0783 32.8285 24.8284C32.0783 25.5786 31.0609 26 30 26C28.9392 26 27.9217 25.5786 27.1716 24.8284C26.4215 24.0783 26 23.0609 26 22C26 20.85 26.486 19.814 27.262 19.084Z" fill="#E7E2E2" fillOpacity="0.81"/>
-            </svg>
+          <button className="action-button" title="Notifications">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="currentColor"/></svg>
           </button>
 
           {isLoggedIn  
@@ -115,37 +187,21 @@ const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
                   ref={profileRef}
                   className="profile-section"
                   onClick={toggleDropdown}
+                  title="My Account"
                 >
                   <img
                     src="https://api.builder.io/api/v1/image/assets/TEMP/21e8c4ad58b36ddd2a9af3f8fa0325468a156350?width=100"
                     alt="Profile"
                     className="profile-image"
                   />
-                  <svg
-                    className={`dropdown-arrow ${isDropdownOpen ? 'open' : ''}`}
-                    width="16"
-                    height="9"
-                    viewBox="0 0 16 9"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M7.29289 8.70714C7.68342 9.09766 8.31658 9.09766 8.70711 8.70714L15.0711 2.34318C15.4616 1.95265 15.4616 1.31949 15.0711 0.928963C14.6805 0.538438 14.0474 0.538438 13.6569 0.928963L8 6.58582L2.34315 0.928963C1.95262 0.538438 1.31946 0.538438 0.928932 0.928963C0.538408 1.31949 0.538408 1.95265 0.928932 2.34318L7.29289 8.70714ZM7 7.00003V8.00003H9V7.00003H7Z" fill="#C3BEBE"/>
-                  </svg>
                 </div>
 
                 {isDropdownOpen && (
                   <div ref={dropdownRef} className="profile-dropdown">
                     <button className="dropdown-item" onClick={handleProfile}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="currentColor"/>
-                        <path d="M12 14C8.13401 14 5 17.134 5 21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21C19 17.134 15.866 14 12 14Z" fill="currentColor"/>
-                      </svg>
                       Profile
                     </button>
-                    <button className="dropdown-item login-item" onClick={handleLogout}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                    <button className="dropdown-item logout-item" onClick={handleLogout}>
                       Logout
                     </button>
                   </div>
@@ -153,10 +209,7 @@ const Navbar = ({isLoggedIn, setIsLoggedIn}) => {
               </div>
             )
             :(
-              <button className="dropdown-item login-item" onClick={handleLogin}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <button className="login-button secondary-btn" onClick={handleLogin}>
                 Login
               </button>
             )

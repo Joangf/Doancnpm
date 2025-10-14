@@ -1,520 +1,404 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&family=Varela&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
 
-.profile-page {
+/* Main Page Layout */
+.profile-page.industrial-theme {
   min-height: 100vh;
-  background: #242121;
-  color: #fff;
-  font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
+  padding-top: 80px; /* Space for fixed Navbar */
+  background: #1A1A1A; /* Consistent background */
+  color: #E0E0E0;
+  font-family: 'Roboto', sans-serif;
 }
 
 .profile-container {
   display: flex;
-  max-width: 1920px;
+  max-width: 1400px;
   margin: 0 auto;
-  gap: 2rem;
-  padding: 2rem;
+  gap: 40px;
+  padding: 40px;
 }
 
 /* Sidebar */
 .profile-sidebar {
-  flex: 0 0 340px;
+  flex: 0 0 280px; /* Fixed width sidebar */
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 20px;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin-top: 5rem;
-  margin-bottom: 2rem;
+  gap: 15px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
 }
 
 .user-avatar img {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.user-details {
-  flex: 1;
+  border: 2px solid #FFD700; /* Gold border for user avatar */
 }
 
 .user-name {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 700;
-  margin: 0 0 0.25rem 0;
-  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 4px 0;
+  color: #E0E0E0;
 }
 
 .user-subtitle {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 400;
   margin: 0;
-  color: #808080;
+  color: #A0A0A0;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 8px;
 }
 
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(0deg, #242121 0%, #242121 100%);
+  gap: 15px;
+  padding: 12px 15px;
+  background: transparent;
   border: none;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 400;
+  border-radius: 5px; /* Sharp corners */
+  border-left: 3px solid transparent; /* Placeholder for active state */
+  color: #A0A0A0; /* Muted color for inactive items */
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   text-align: left;
 }
-
-.sidebar-nav-item.active {
-  background: linear-gradient(90deg, #737373 0%, #242121 100%);
-}
-
 .sidebar-nav-item:hover {
-  background: linear-gradient(90deg, #5a5a5a 0%, #242121 100%);
+  background: #242424;
+  color: #E0E0E0;
+  border-left-color: #FFD700;
+}
+.sidebar-nav-item.active {
+  background: #242424;
+  color: #FFD700; /* Gold for active item */
+  border-left-color: #FFD700;
 }
 
 .nav-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
 }
 
-.nav-label {
-  flex: 1;
-}
-
-.sidebar-divider {
-  height: 2rem;
-}
-
-/* Main Content */
+/* Main Content Panel */
 .profile-main {
   flex: 1;
-  max-width: 1200px;
-}
-
-.profile-header {
-  margin-top: 4rem;
-  margin-bottom: 1.5rem;
+  background: #242424; /* Main content in a panel */
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .profile-header h1 {
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0 0 1rem 0;
-  color: #fff;
-}
-
-.profile-header::after {
-  content: '';
-  display: block;
-  height: 1px;
-  background: #808080;
-  margin-top: 1rem;
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 20px 0;
+  color: #E0E0E0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
 }
 
 .profile-content {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 3rem;
+  grid-template-columns: 1fr 300px; /* Form and picture section */
+  gap: 50px;
   align-items: start;
 }
 
-/* Form */
+/* Form Styling */
 .profile-form {
-  flex: 1;
-}
-
-.form-section {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 25px;
 }
 
-.form-hint {
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #A0A0A0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input {
+  height: 44px;
+  padding: 0 15px;
+  background: #1A1A1A; /* Darker input background */
+  border: 1px solid #333;
+  border-radius: 5px;
+  color: #E0E0E0;
   font-size: 16px;
-  font-weight: 400;
-  color: #57606a;
-  margin: 0;
-  line-height: 1.5;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
-.form-link {
-  color: #0969DA;
-  text-decoration: none;
+.form-group input:focus {
+  outline: none;
+  border-color: #2D6A9E;
+  box-shadow: 0 0 0 3px rgba(45, 106, 158, 0.5);
 }
-
-.form-link:hover {
-  text-decoration: underline;
+.profile-form-button {
+  display: flex;
+  gap: 50px; /* space between buttons */
+  justify-content: flex-start; /* or center / space-between */
+  align-items: center;
 }
-
 .birthday-inputs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.birthday-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.birthday-label {
-  font-size: 20px;
-  font-weight: 400;
-  color: #fff;
-}
-
-.birthday-field input {
-  padding: 0.75rem 1rem;
-  background: #3B3737;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 20px;
-  outline: none;
-}
-
-.save-button {
-  padding: 0.75rem 2.5rem;
-  background: #4570e0;
-  border: none;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  align-self: center;
-  margin-top: 1rem;
-}
-
-.save-button:hover {
-  background: #5581F1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(85, 129, 241, 0.4);
-}
-
-.delete-acc-button {
-  padding: 0.75rem 2.2rem;
-  background: #cc1f1f;
-  border: none;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  align-self: center;
-  margin-top: 5rem;
-}
-
-.delete-acc-button:hover {
-  background: #fb3f3f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(85, 129, 241, 0.4);
+  gap: 15px;
 }
 
 /* Profile Picture Section */
 .profile-picture-section {
-  flex: 0 0 305px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 15px;
+  padding-top: 10px;
 }
 
 .section-title {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: #A0A0A0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin: 0;
+  text-align: center;
 }
 
 .profile-picture-wrapper {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 20px;
 }
 
 .profile-picture {
-  width: 300px;
-  height: 300px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
+  border: 3px solid #333;
 }
 
-.edit-picture-button {
+/* Button Styles (Primary & Secondary) */
+.primary-btn, .secondary-btn {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1.5rem;
-  background: #C3BEBE;
+  justify-content: center;
   border: none;
-  border-radius: 20px;
-  color: #131212;
-  font-size: 20px;
-  font-weight: 400;
+  border-radius: 5px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
+  height: 44px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
-.edit-picture-button:hover {
-  background: #d4d0d0;
-  transform: translateY(-2px);
+.save-button.primary-btn {
+  background: #FFD700;
+  color: #1A1A1A;
+  align-self: flex-start; /* Align button to the left */
+  margin-top: 10px;
+}
+.save-button.primary-btn:hover {
+  background: #E6C200;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
-.edit-picture-button svg {
-  flex-shrink: 0;
+.delete-button.primary-btn {
+  background: #582828;
+  color: #FFAAAA;
+  align-self: flex-start; /* Align button to the left */
+  margin-top: 10px;
+}
+.delete-button.primary-btn:hover {
+  background: #8B2E2E;
+  box-shadow: 0 0 12px rgba(255, 80, 80, 0.5);
 }
 
-/* Delete Account Confirmation Session*/
-.confirm-container {
-  z-index: 9999;
-  position: fixed;
-  top: 0;
-  left: 0;
+
+
+.edit-picture-button.secondary-btn {
+  background: #2D6A9E;
+  color: white;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
-.confirm {
-  max-width: 700px;
-  max-height: 400px;
-  background: #1f1c1c;
-  border-radius: 20px;
-  padding: 0 2.5rem 3rem;
-}
-
-.confirm h1 {
-  font-size: 32px;
-  font-weight: 700;
-  margin: 2rem 0 1rem 0;
-  text-align: center;
-  color: #fff;
-}
-
-.confirm p {
-  font-size: 20px;
-  font-weight: 400;
-  margin: 4rem 2rem 0rem 2rem;
-  text-align: left;
-  color: #fff;
-}
-
-.button-group {
-  display: flex;
-  gap: 2rem;
-  align-items: stretch;
-}
-
-.button-group button {
-  flex: 1;
-  max-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-}
-
-.cancel-button {
-  padding: 0.75rem 1.2rem;
-  background: #4570e0;
-  border: none;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 3rem 0 0 0;
-}
-
-.cancel-button:hover {
-  background: #5581F1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(85, 129, 241, 0.4);
-}
-
-.ok-button {
-  padding: 0.75rem 1.2rem;
-  background: #cc1f1f;
-  border: none;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 3rem 0 0 0;
-}
-
-.ok-button:hover {
-  background: #fb3f3f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(85, 129, 241, 0.4);
+.edit-picture-button.secondary-btn:hover {
+  background: #255C8A;
+  box-shadow: 0 0 15px rgba(45, 106, 158, 0.5);
 }
 
 /* Responsive Design */
-@media (max-width: 1400px) {
+@media (max-width: 1200px) {
   .profile-content {
     grid-template-columns: 1fr;
   }
-
   .profile-picture-section {
-    order: -1;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-
-  .profile-picture {
-    width: 200px;
-    height: 200px;
+    order: -1; /* Move picture to the top */
+    padding-bottom: 30px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 30px;
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .profile-container {
     flex-direction: column;
   }
-
   .profile-sidebar {
+    width: 100%;
     flex: 1;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
   }
+}
 
+@media (max-width: 600px) {
   .profile-main {
-    width: 100%;
+    padding: 20px;
   }
-}
-
-@media (max-width: 768px) {
-  .profile-container {
-    padding: 1rem;
-  }
-
-  .user-info {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .user-name {
-    font-size: 24px;
-  }
-
-  .user-subtitle {
-    font-size: 18px;
-  }
-
-  .sidebar-nav-item {
-    font-size: 18px;
-    padding: 0.65rem 1.25rem;
-  }
-
-  .profile-header h1 {
-    font-size: 28px;
-  }
-
-  .form-group label {
-    font-size: 20px;
-  }
-
-  .form-group input {
-    font-size: 18px;
-  }
-
-  .birthday-inputs {
+  .form-row, .birthday-inputs {
     grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .save-button {
-    font-size: 20px;
-    width: 100%;
-  }
-
-  .profile-picture {
-    width: 180px;
-    height: 180px;
-  }
-
-  .section-title {
-    font-size: 20px;
+    gap: 25px;
   }
 }
+/* --- Delete Confirmation Modal --- */
 
-@media (max-width: 480px) {
-  .user-name {
-    font-size: 22px;
-  }
+/* Full-screen overlay */
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
 
-  .user-subtitle {
-    font-size: 16px;
-  }
+/* The modal box itself */
+.confirm-modal {
+  background: #242424; /* Panel background */
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  max-width: 500px;
+  width: 90%;
+  padding: 30px 35px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: scaleIn 0.3s ease;
+}
 
-  .sidebar-nav-item {
-    font-size: 16px;
-    padding: 0.6rem 1rem;
-  }
+.confirm-icon svg {
+  margin-bottom: 10px;
+}
 
-  .profile-header h1 {
-    font-size: 24px;
-  }
+.confirm-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #E0E0E0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
 
-  .form-group label {
-    font-size: 18px;
-  }
+.confirm-text {
+  color: #A0A0A0;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
 
-  .form-group input,
-  .birthday-label {
-    font-size: 16px;
-  }
+/* Container for the buttons */
+.confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
 
-  .form-hint {
-    font-size: 14px;
-  }
+/* Generic button styles from the theme */
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 44px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
 
-  .save-button {
-    font-size: 18px;
-    padding: 0.65rem 2rem;
-  }
+/* New button styles for the modal */
+.neutral-btn {
+  background: #444;
+  color: #E0E0E0;
+}
+.neutral-btn:hover {
+  background: #555;
+}
 
-  .profile-picture {
-    width: 150px;
-    height: 150px;
-  }
+.destructive-btn {
+  background: #B83B5E; /* Muted, deep red for destructive actions */
+  color: white;
+}
+.destructive-btn:hover {
+  background: #a13251;
+  box-shadow: 0 0 15px rgba(184, 59, 94, 0.5); /* Red glow */
+}
 
-  .edit-picture-button {
-    font-size: 18px;
-    padding: 0.5rem 1.25rem;
-  }
-
-  .edit-picture-button svg {
-    width: 24px;
-    height: 24px;
-  }
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }

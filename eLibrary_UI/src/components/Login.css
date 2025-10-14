@@ -2,7 +2,6 @@
 
 .login-page {
   min-height: 100vh;
-  background: #1f1f1f;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,9 +11,9 @@
 .login-container {
   width: 100%;
   max-width: 500px;
-  background: #292828;
+  background: #242424;
+  border:  1px solid #333;
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 
@@ -111,7 +110,7 @@
 }
 
 .tab-button.active {
-  color: #5581F1;
+  color: #FFD700;
 }
 
 .tab-button.active::after {
@@ -121,7 +120,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #5581F1;
+  background: #FFD700;
 }
 
 .tab-button:hover:not(.active) {
@@ -190,14 +189,13 @@
 }
 
 .auth-button.primary {
-  background: linear-gradient(135deg, #1153FC, #5581F1);
+  background: #2D6A9E;
   color: #ffffff;
 }
 
 .auth-button.primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #0d47e6, #4a73e8);
+  background: #255C8A;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(17, 83, 252, 0.3);
 }
 
 .auth-button:disabled {
@@ -207,7 +205,7 @@
 }
 
 .auth-button.primary:disabled {
-  background: linear-gradient(135deg, #1153FC, #5581F1);
+  background: #255C8A;;
 }
 
 .loading-spinner {
@@ -242,7 +240,7 @@
 .link-button {
   background: transparent;
   border: none;
-  color: #5581F1;
+  color: #255C8A;;
   font-family: 'Roboto', -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 14px;
   cursor: pointer;

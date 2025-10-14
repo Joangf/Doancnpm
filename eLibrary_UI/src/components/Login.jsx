@@ -9,6 +9,13 @@ import OTP from "./AuthForm/OTP.JSX";
 import Forgot from "./AuthForm/Forgot";
 import Reset from "./AuthForm/Reset";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
+const LogoIcon = () => (
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2.5L37.5 12.5V32.5L20 22.5L2.5 32.5V12.5L20 2.5Z" stroke="#FFD700" strokeWidth="2" strokeLinejoin="round"/>
+    <path d="M2.5 12.5L20 22.5L37.5 12.5" stroke="#FFD700" strokeWidth="2" strokeLinejoin="round"/>
+    <path d="M20 37.5V22.5" stroke="#FFD700" strokeWidth="2" strokeLinejoin="round"/>
+  </svg>
+);
 const Login = ({setIsLoggedIn}) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +87,6 @@ const handleSubmit = async (e) => {
       setIsLoggedIn(true);
       sessionStorage.setItem('isLoggedIn', 'true');
       navigate("/");
-      alert("Successful login");
     });
     
 
@@ -141,7 +147,7 @@ const handleSubmit = async (e) => {
             Back
           </button>
           <div className="logo-section">
-            <img src={react} alt="" />
+            <LogoIcon />
             <div className="logo-text">
               <span className="logo-keazon">KeazoN</span>
               <span className="logo-books">BOOKS</span>
