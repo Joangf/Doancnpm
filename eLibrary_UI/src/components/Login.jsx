@@ -5,7 +5,7 @@ import react from '../assets/react.svg'
 import TickingSuccess from "./TickingSuccess";
 import Log from "./AuthForm/Log"
 import Register from "./AuthForm/Reg"
-import OTP from "./AuthForm/OTP.JSX";
+import OTP from "./AuthForm/OTP";
 import Forgot from "./AuthForm/Forgot";
 import Reset from "./AuthForm/Reset";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
