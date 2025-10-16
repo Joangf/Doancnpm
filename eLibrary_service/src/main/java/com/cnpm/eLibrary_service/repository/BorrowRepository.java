@@ -30,4 +30,7 @@ public interface BorrowRepository extends JpaRepository<Borrow,Long> {
     );
 
     List<Borrow> findByReturnDateTimeIsNullAndDueDateTimeBefore(LocalDateTime now);
+
+    long countByUserAndReturnDateTimeIsNull(User user);
+
 }

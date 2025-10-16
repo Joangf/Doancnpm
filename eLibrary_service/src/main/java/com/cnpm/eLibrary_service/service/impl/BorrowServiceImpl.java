@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,8 +48,16 @@ public class BorrowServiceImpl implements BorrowService {
         // Validate số ngày theo subscription
         UserSubscription sub = subscriptionService.getValidSubscription(user);
         if (request.getBorrowDays() > sub.getSubscriptionPlan().getMaxBorrowDays()) {
-            throw new AppException(ErrorCode.BORROW_LIMIT_EXCEEDED);
+            throw new AppException(ErrorCode.BORROWDAYS_LIMIT_EXCEEDED);
         }
+        // Đếm số sách đang mượn chưa trả
+        long currentBorrowedCount = borrowRepository.countByUserAndReturnDateTimeIsNull(user);
+
+        // Kiểm tra giới hạn số sách tối đa theo subscription
+        if (currentBorrowedCount >= sub.getSubscriptionPlan().getMaxBorrowNumbers()) {
+            throw new AppException(ErrorCode.BORROWNUM_LIMIT_EXCEEDED);
+        }
+
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -94,7 +101,7 @@ public class BorrowServiceImpl implements BorrowService {
         // Validate số ngày theo subscription
         UserSubscription sub = subscriptionService.getValidSubscription(user);
         if (request.getExtraDays() > sub.getSubscriptionPlan().getMaxBorrowDays()) {
-            throw new AppException(ErrorCode.BORROW_LIMIT_EXCEEDED);
+            throw new AppException(ErrorCode.BORROWDAYS_LIMIT_EXCEEDED);
         }
 
         // Đánh dấu borrow cũ đã return
