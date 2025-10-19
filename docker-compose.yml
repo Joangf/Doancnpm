@@ -1,0 +1,97 @@
+services:
+  # --------------------
+  # MySQL Database Service
+  # --------------------
+  elibrary-db:
+    image: mysql:8.1.0
+    container_name: elibrary-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eLibrary_service
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql # Persist data
+      - ./eLibrary_service/docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  # --------------------
+  # Redis Service
+  # --------------------
+  elirary-redis:
+    image: redis:latest
+    container_name: elirary-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"] # lưu dữ liệu tránh mất khi restart
+    volumes:
+      - redis-data:/data
+
+  # -----------------------
+  # Elasticsearch Service
+  # -----------------------
+  elibrary-es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: elibrary-es
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data # Persist data
+
+  # -----------------------
+  # Kibana Service
+  # -----------------------
+  elibrary-kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: elibrary-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elibrary-es:9200
+      - XPACK_SECURITY_ENABLED=false
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elibrary-es 
+
+  # ------------------------
+  # Spring Boot App
+  # ------------------------
+  elibrary-app:
+    build: ./eLibrary_service
+    container_name: elibrary-app
+    restart: on-failure
+    depends_on:
+      elibrary-db:
+        condition: service_healthy # Wait for the DB to be ready
+      elibrary-es:
+        condition: service_started # Wait for ES to start
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://elibrary-db:3306/eLibrary_service
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_ELASTICSEARCH_URIS=http://elibrary-es:9200
+  # ------------------------
+  # UI
+  # ------------------------
+  elibrary-ui:
+    build: ./eLibrary_UI
+    container_name: elibrary-ui
+    ports:
+      - "5173:80"
+    depends_on:
+      - elibrary-app
+volumes:
+  db-data:
+  es-data:
+  redis-data:
