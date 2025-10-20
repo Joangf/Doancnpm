@@ -1,0 +1,37 @@
+name: Sync to Test Branch
+
+on:
+  push:
+    branches:
+      - UI
+      - feature/core
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout test branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'test'
+          fetch-depth: 0
+
+      - name: Set up Git user
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Merge feature/core branch
+        run: |
+          git fetch origin feature/core:feature/core
+          git merge --no-ff -m "CI: Merge branch 'feature/core' into test" feature/core
+
+      - name: Merge UI branch
+        run: |
+          git fetch origin UI:UI
+          git merge --no-ff -m "CI: Merge branch 'UI' into test" UI
+      
+      - name: Push changes
+        run: |
+          git push origin test
