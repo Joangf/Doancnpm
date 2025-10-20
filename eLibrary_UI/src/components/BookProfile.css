@@ -211,7 +211,12 @@
   background: #2D6A9E; /* Steel blue */
   color: white;
 }
-.secondary-btn:hover { 
+.secondary-btn:disabled { 
+  background: #333333; /* Steel blue */
+  color: white;
+  cursor: not-allowed;
+}
+.secondary-btn:hover:not(:disabled) { 
   background: #255C8A; 
   box-shadow: 0 0 15px rgba(45, 106, 158, 0.5); /* Blue glow */
 }

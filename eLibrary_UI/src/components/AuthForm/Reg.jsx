@@ -1,6 +1,6 @@
 import "../Login.css";
 import AnimatedSubmitButton from "../AnimatedSubmitButton";
-const Reg = ({formData ,handleSubmit, handleInputChange, isLoading }) => (
+const Reg = ({formData ,handleSubmit, handleInputChange, isLoading, invalidSubmit }) => (
   <form onSubmit={handleSubmit} className="auth-form">
     <div className="form-row">
       <div className="form-group">
@@ -87,7 +87,12 @@ const Reg = ({formData ,handleSubmit, handleInputChange, isLoading }) => (
           <div className="error_message" style={{ color: "red" }}>
             Passwords do not match
           </div>
-        )}
+      )}      
+      {invalidSubmit && (
+        <div className="error-message" style={{ color: "red" }}>
+          Your email has been used by another user
+        </div>
+      )}
     </div>
     <AnimatedSubmitButton
       isLoading={isLoading}

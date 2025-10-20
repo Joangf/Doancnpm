@@ -25,7 +25,9 @@ const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLog
 
   const PlayIcon = () => (
     <svg onMouseEnter={()=> {
-      if(!alreadyBorrowedBookId) setDropdownVisible(true)}}
+      if(!alreadyBorrowedBookId.includes(book.id)) {
+        setDropdownVisible(true)}
+      }}
       style={{
         transform: isDropdownVisible ? 'rotate(90deg)' : 'rotate(0deg)',
         transition: 'transform 0.3s ease'
@@ -92,7 +94,6 @@ const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLog
   // Generate an array of numbers from 1 to 30 for the dropdown
   const daysOptions = Array.from({ length: 30 }, (_, i) => i + 1);
   useEffect(()=>{
-    console.log(isLoggedIn);
     const fetchBook = async () =>{
       try{
         const response = await fetch(`${API_URL}/book/${id}`);
@@ -241,7 +242,12 @@ const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLog
                 </div>
 
 
-                <button className="download-button action-btn secondary-btn"> {/* Added new classes */}
+                <button className="download-button action-btn secondary-btn" 
+                  onClick={() =>
+                    window.open(book.pdfUrl, '_blank')}
+                  disabled={!alreadyBorrowedBookId.includes(book.id)}
+                > 
+                  
                   <DownloadIcon />
                   <span>Download PDF</span> {/* More descriptive label */}
                 </button>
