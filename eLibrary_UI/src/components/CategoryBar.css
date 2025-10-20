@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+
+/* Main Bar Styling */
+.category-bar.industrial-theme {
+  width: 100%;
+  height: 60px;
+  background: #1A1A1A; /* Consistent dark background */
+  position: fixed;
+  top: 80px; /* Assuming a main header of 80px */
+  left: 0;
+  z-index: 999;
+  border-bottom: 1px solid #333; /* Industrial style border */
+  font-family: 'Roboto', sans-serif;
+}
+
+.category-bar-content {
+  width: 100%;
+  height: 100%;
+  max-width: 1400px; /* Consistent max-width */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  overflow: hidden;
+}
+
+.categories-container {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* More space between buttons */
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 10px 0;
+}
+
+.categories-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Redesigned Category Button */
+.category-button {
+  background: #242424; /* Dark panel color for default state */
+  border: 1px solid #333;
+  border-radius: 5px; /* Sharp corners */
+  padding: 8px 20px;
+  color: #A0A0A0; /* Muted text color */
+  font-weight: 700; /* Bolder text */
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 0.5px;
+}
+
+.category-button:hover {
+  background: #333;
+  border-color: #555;
+  color: #E0E0E0; /* Brighter text on hover */
+}
+
+/* Active state matches the primary gold accent */
+.category-button.active {
+  background: #FFD700;
+  border-color: #FFD700;
+  color: #1A1A1A; /* Dark text on gold background */
+  font-weight: 900;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.category-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #1A1A1A, 0 0 0 4px #2D6A9E; /* Steel blue focus ring */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .category-bar.industrial-theme {
+    height: 55px;
+  }
+  .category-bar-content {
+    padding: 0 20px;
+  }
+  .categories-container {
+    gap: 10px;
+  }
+  .category-button {
+    padding: 6px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-bar-content {
+    padding: 0 15px;
+  }
+  .category-button {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+}

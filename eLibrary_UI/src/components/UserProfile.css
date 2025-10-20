@@ -1,0 +1,404 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+
+/* Main Page Layout */
+.profile-page.industrial-theme {
+  min-height: 100vh;
+  padding-top: 80px; /* Space for fixed Navbar */
+  background: #1A1A1A; /* Consistent background */
+  color: #E0E0E0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.profile-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 40px;
+  padding: 40px;
+}
+
+/* Sidebar */
+.profile-sidebar {
+  flex: 0 0 280px; /* Fixed width sidebar */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.user-avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #FFD700; /* Gold border for user avatar */
+}
+
+.user-name {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 4px 0;
+  color: #E0E0E0;
+}
+
+.user-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  color: #A0A0A0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  background: transparent;
+  border: none;
+  border-radius: 5px; /* Sharp corners */
+  border-left: 3px solid transparent; /* Placeholder for active state */
+  color: #A0A0A0; /* Muted color for inactive items */
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+.sidebar-nav-item:hover {
+  background: #242424;
+  color: #E0E0E0;
+  border-left-color: #FFD700;
+}
+.sidebar-nav-item.active {
+  background: #242424;
+  color: #FFD700; /* Gold for active item */
+  border-left-color: #FFD700;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+/* Main Content Panel */
+.profile-main {
+  flex: 1;
+  background: #242424; /* Main content in a panel */
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.profile-header h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 20px 0;
+  color: #E0E0E0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.profile-content {
+  display: grid;
+  grid-template-columns: 1fr 300px; /* Form and picture section */
+  gap: 50px;
+  align-items: start;
+}
+
+/* Form Styling */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #A0A0A0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input {
+  height: 44px;
+  padding: 0 15px;
+  background: #1A1A1A; /* Darker input background */
+  border: 1px solid #333;
+  border-radius: 5px;
+  color: #E0E0E0;
+  font-size: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.form-group input:focus {
+  outline: none;
+  border-color: #2D6A9E;
+  box-shadow: 0 0 0 3px rgba(45, 106, 158, 0.5);
+}
+.profile-form-button {
+  display: flex;
+  gap: 50px; /* space between buttons */
+  justify-content: flex-start; /* or center / space-between */
+  align-items: center;
+}
+.birthday-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+/* Profile Picture Section */
+.profile-picture-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 10px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #A0A0A0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-align: center;
+}
+
+.profile-picture-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #333;
+}
+
+/* Button Styles (Primary & Secondary) */
+.primary-btn, .secondary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 44px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.save-button.primary-btn {
+  background: #FFD700;
+  color: #1A1A1A;
+  align-self: flex-start; /* Align button to the left */
+  margin-top: 10px;
+}
+.save-button.primary-btn:hover {
+  background: #E6C200;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.delete-button.primary-btn {
+  background: #582828;
+  color: #FFAAAA;
+  align-self: flex-start; /* Align button to the left */
+  margin-top: 10px;
+}
+.delete-button.primary-btn:hover {
+  background: #8B2E2E;
+  box-shadow: 0 0 12px rgba(255, 80, 80, 0.5);
+}
+
+
+
+.edit-picture-button.secondary-btn {
+  background: #2D6A9E;
+  color: white;
+  width: 100%;
+}
+.edit-picture-button.secondary-btn:hover {
+  background: #255C8A;
+  box-shadow: 0 0 15px rgba(45, 106, 158, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .profile-content {
+    grid-template-columns: 1fr;
+  }
+  .profile-picture-section {
+    order: -1; /* Move picture to the top */
+    padding-bottom: 30px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 900px) {
+  .profile-container {
+    flex-direction: column;
+  }
+  .profile-sidebar {
+    width: 100%;
+    flex: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-main {
+    padding: 20px;
+  }
+  .form-row, .birthday-inputs {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
+/* --- Delete Confirmation Modal --- */
+
+/* Full-screen overlay */
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+/* The modal box itself */
+.confirm-modal {
+  background: #242424; /* Panel background */
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  max-width: 500px;
+  width: 90%;
+  padding: 30px 35px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: scaleIn 0.3s ease;
+}
+
+.confirm-icon svg {
+  margin-bottom: 10px;
+}
+
+.confirm-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #E0E0E0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.confirm-text {
+  color: #A0A0A0;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Container for the buttons */
+.confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+/* Generic button styles from the theme */
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 44px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* New button styles for the modal */
+.neutral-btn {
+  background: #444;
+  color: #E0E0E0;
+}
+.neutral-btn:hover {
+  background: #555;
+}
+
+.destructive-btn {
+  background: #B83B5E; /* Muted, deep red for destructive actions */
+  color: white;
+}
+.destructive-btn:hover {
+  background: #a13251;
+  box-shadow: 0 0 15px rgba(184, 59, 94, 0.5); /* Red glow */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
