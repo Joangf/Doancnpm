@@ -1,0 +1,21 @@
+FROM maven:3.9.11-eclipse-temurin-21-alpine AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
+# SKIP TESTS EXECUTION WHEN BUILD
+RUN mvn clean package -Dmaven.test.skip=true -DskipTests
+
+FROM eclipse-temurin:21-jre-alpine
+
+WORKDIR /app
+
+# COPY THE JAR EXECUTABLE
+COPY --from=build /app/target/*.jar app.jar
+
+# SPRING DEFAULT PORT
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: eLibrary_service
+  datasource:
+    url: jdbc:mysql://localhost:3306/eLibrary_service
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: cnpmhcmut@gmail.com
+    password: nvbs ecpy zlyh ajxf
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+#  -- Elastic search
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 5s
+    socket-timeout: 10s
+server:
+  port: 8080
+
+
+jwt:
+  signerKey: "dmfWBuIIiGyXCJWG/6cioNLt7IRMSp3CgKMRitccCgDZKe/PQMHI6/gt1oGYNAGX"
+  valid-duration: 600000 #in second
+  refreshable-duration: 3000 #in second
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-html
+  api-docs:
+    path: /api-docs
+
+frontend:
+  base-url: http://localhost:5173
+
+
