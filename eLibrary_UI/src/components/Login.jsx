@@ -187,12 +187,14 @@ const handleSubmit = async (e) => {
               handleSubmit={handleSubmit}
               handleInputChange={handleInputChange}
               isLoading={isLoading}
+              invalidSubmit={invalidSubmit}
             /> )}
             {activeTab === "forgot" && ( <Forgot 
               formData={formData}
               handleSubmit={handleSubmit}
               handleInputChange={handleInputChange}
               isLoading={isLoading}
+              invalidSubmit={invalidSubmit}
               setActiveTab={setActiveTab}
             /> )}
             {activeTab === "otp" && ( <OTP 
