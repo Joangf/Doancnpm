@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import './App.css'
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 import Navbar from './components/Navbar'
@@ -10,11 +11,12 @@ import BookGrid from './components/BookGrid'
 import Login from './components/Login'
 import UserProfile from './components/UserProfile'
 import BookProfilePage from './components/BookProfilePage'
-const Home = ({isLoggedIn, setIsLoggedIn, size=12}) => {
+const Home = ({isLoggedIn, setIsLoggedIn, size=24}) => {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeCategories, setActiveCategory] = useState([]);
-  const page = useRef(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
   const request = a => ({
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -29,6 +31,7 @@ const Home = ({isLoggedIn, setIsLoggedIn, size=12}) => {
       }
       const data = await response.json();
       if (url.includes('/book')) {
+        setHasMore(!data.result.last);
         if (append) {
           setBooks(prevBooks => [...prevBooks, ...data.result.content]);
         } else {
@@ -43,64 +46,42 @@ const Home = ({isLoggedIn, setIsLoggedIn, size=12}) => {
       console.log("An error has occurred", error);
     }
   }, []);
-  const ScrollFetch = () => {
-    const bottomRef = useRef(null);
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        if (!activeCategories || activeCategories.length === 0) {
-          return;
-        }      
-        const observer = new IntersectionObserver(
-        async (entries) => {
-          const first = entries[0];
-          if (first.isIntersecting && !isLoading) {
-            setIsLoading(true);
-            page.current++;
-            const send = request({categoryIds: activeCategories.flatMap(category => Array.isArray(category.id) ? category.id : [category.id])});
-            await fetchContent(`${API_URL}/book/filter?page=${page.current}&size=${size}`, send, true); 
-            
-            setIsLoading(false);
-          }
-        },
-        { threshold: 1 }
-      );
-
-      const current = bottomRef.current;
-      if (current) observer.observe(current);
-      
-      return () => {
-        if(current) observer.unobserve(current);
-      };
-    }, [isLoading, activeCategories]);
-
-    return <div ref={bottomRef} style={{ height: "1px" }}></div>;
-  }
-  
-  useEffect(()=> {
+  useEffect(()=> { // Lấy category ban đầu
     fetchContent(`${API_URL}/category`);
   }, [fetchContent]);
-
-  useEffect(() =>{
-    if (!activeCategories || activeCategories.length === 0) {
-      return;
-    }
-    page.current = 0;
-    const send = request({categoryIds: activeCategories.flatMap(category => Array.isArray(category.id) ? category.id : [category.id])});
-    fetchContent(`${API_URL}/book/filter?page=0&size=${size}`, send);
-  }, [activeCategories, fetchContent]);
+  useEffect(() => { // Đổi category thì reset book và page
+    if (!activeCategories || activeCategories.length === 0) return;
+    setPage(0);
+    setBooks([]);
+  }, [activeCategories]);
+  useEffect(() => { // Fetch thêm book khi cuộn trang
+    if (!activeCategories || activeCategories.length === 0) return;
+    const send = request({
+      categoryIds: activeCategories.flatMap(category => 
+        Array.isArray(category.id) ? category.id : [category.id]
+      )
+    });
+    fetchContent(`${API_URL}/book/filter?page=${page}&size=${size}`, send, page > 0);
+  }, [page, activeCategories, fetchContent]);
 
   return (
     <div className="app">
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} activeCategories={activeCategories}/>
-      <ScrollFetch />
+
       {categories && (<CategoryBar categories={categories} activeCategories={activeCategories} setActiveCategory={setActiveCategory}/>)}
       {books && (<BookSlider books={books} />)}
       {books && (<BookGrid books={books} />)}
-      {/* <main className="main-content">
+      <InfiniteScroll
+        dataLength={books.length}
+        next={() => setPage(prevPage => prevPage + 1) }
+        hasMore={hasMore}
+        loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
+        endMessage={<main className="main-content">
         <span className="logo-keazon">KeazoN</span>
         <span className="logo-books">BOOKS</span>
-      </main> */}
+      </main>}
+      />
+
     </div>
   )
 }
