@@ -3,6 +3,7 @@ package com.cnpm.eLibrary_service.controller;
 import com.cnpm.eLibrary_service.dto.request.BookFilterRequest;
 import com.cnpm.eLibrary_service.dto.request.BookRequest;
 import com.cnpm.eLibrary_service.dto.request.BookSearchingRequest;
+import com.cnpm.eLibrary_service.dto.request.GetNewBooksRequest;
 import com.cnpm.eLibrary_service.dto.response.ApiResponse;
 import com.cnpm.eLibrary_service.dto.response.BookResponse;
 import com.cnpm.eLibrary_service.service.BookService;
@@ -91,5 +92,12 @@ public class BookController {
             return ApiResponse.<String>builder()
                     .result(coverUrl)
                     .build();
+    }
+
+    @GetMapping("/new")
+    public ApiResponse<List<BookResponse>> getNewBooks(@RequestBody GetNewBooksRequest request){
+        return ApiResponse.<List<BookResponse>>builder()
+                .result(bookService.getNewBooks(request))
+                .build();
     }
 }

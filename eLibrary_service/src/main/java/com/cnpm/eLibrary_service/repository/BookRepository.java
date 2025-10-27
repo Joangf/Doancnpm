@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findDistinctByCategories_IdIn(List<Long> categoryIds, Pageable pageable);
 
     Page<Book> findDistinctByCategoriesIn(List<Category> categories, Pageable pageable);
+
+    List<Book> findByInsertAtAfter(LocalDateTime time);
+
+    // Lấy top N sách mới nhất (sắp xếp giảm dần theo insertAt)
+    List<Book> findTop10ByOrderByInsertAtDesc();
 }

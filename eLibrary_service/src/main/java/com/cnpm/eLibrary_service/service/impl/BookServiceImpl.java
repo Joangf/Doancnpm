@@ -3,6 +3,7 @@ package com.cnpm.eLibrary_service.service.impl;
 import com.cnpm.eLibrary_service.dto.request.BookFilterRequest;
 import com.cnpm.eLibrary_service.dto.request.BookRequest;
 import com.cnpm.eLibrary_service.dto.request.BookSearchingRequest;
+import com.cnpm.eLibrary_service.dto.request.GetNewBooksRequest;
 import com.cnpm.eLibrary_service.dto.response.BookResponse;
 import com.cnpm.eLibrary_service.es_document.BookEs;
 import com.cnpm.eLibrary_service.es_mapper.BookEsMapper;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -176,5 +178,35 @@ public class BookServiceImpl implements BookService {
 
         return coverUrl;
     }
+
+    @Override
+    public List<BookResponse> getNewBooks(GetNewBooksRequest request) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime fromTime;
+
+        String period = request.getPeriod();
+        // Chọn mốc thời gian
+        switch (period.toLowerCase()) {
+            case "week":
+                fromTime = now.minusWeeks(1);
+                break;
+            case "month":
+                fromTime = now.minusMonths(1);
+                break;
+            default:
+                throw new AppException(ErrorCode.INVALID_PERIOD);
+        }
+
+        // Lấy sách thêm trong khoảng thời gian đó
+        List<Book> newBooks = bookRepository.findByInsertAtAfter(fromTime);
+
+        // Sắp xếp giảm dần theo insertAt (sách mới nhất lên đầu)
+        newBooks.sort((a, b) -> b.getInsertAt().compareTo(a.getInsertAt()));
+
+        return newBooks.stream()
+                .map(bookMapper::toBookResponse)
+                .collect(Collectors.toList());
+    }
+
 
 }
