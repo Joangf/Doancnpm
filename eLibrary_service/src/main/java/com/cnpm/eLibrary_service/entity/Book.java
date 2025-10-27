@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -39,4 +40,14 @@ public class Book {
 
     @ManyToMany
     Set<Category> categories;
+
+    Double averageRating;
+
+    @Column(updatable = false)
+    LocalDateTime insertAt;
+
+    @PrePersist
+    public void onCreate() {
+        insertAt = LocalDateTime.now();
+    }
 }

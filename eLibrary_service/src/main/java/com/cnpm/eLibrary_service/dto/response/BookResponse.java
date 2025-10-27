@@ -3,6 +3,7 @@ package com.cnpm.eLibrary_service.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -20,7 +21,10 @@ public class BookResponse {
     String description;
     String pdfUrl;
     String coverUrl;
+    Double averageRating;
+    LocalDateTime insertAt;
 
     Set<CategoryResponse> categories;
+
 }
 

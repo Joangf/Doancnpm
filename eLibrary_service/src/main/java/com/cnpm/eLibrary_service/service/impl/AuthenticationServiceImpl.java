@@ -243,7 +243,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
-                .issuer("hoangha.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
@@ -263,6 +262,4 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return jwsObject.serialize();
     }
-
-
 }

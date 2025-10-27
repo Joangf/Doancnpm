@@ -3,6 +3,7 @@ package com.cnpm.eLibrary_service.service;
 import com.cnpm.eLibrary_service.dto.request.BookFilterRequest;
 import com.cnpm.eLibrary_service.dto.request.BookRequest;
 import com.cnpm.eLibrary_service.dto.request.BookSearchingRequest;
+import com.cnpm.eLibrary_service.dto.request.GetNewBooksRequest;
 import com.cnpm.eLibrary_service.dto.response.BookResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,4 +23,6 @@ public interface BookService {
     Page<BookResponse> filterBooks(BookFilterRequest request, int page, int size);
 
     String uploadCover(Long id, MultipartFile file) throws IOException;
+
+    List<BookResponse> getNewBooks(GetNewBooksRequest request);
 }
