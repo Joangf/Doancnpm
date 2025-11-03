@@ -4,6 +4,7 @@ import com.cnpm.eLibrary_service.dto.request.*;
 import com.cnpm.eLibrary_service.dto.response.AuthenticationResponse;
 import com.cnpm.eLibrary_service.dto.response.IntrospectResponse;
 import com.cnpm.eLibrary_service.dto.response.ResetPasswordResponse;
+import com.cnpm.eLibrary_service.entity.User;
 import com.nimbusds.jose.JOSEException;
 
 import java.text.ParseException;
@@ -13,6 +14,8 @@ public interface AuthenticationService {
             throws JOSEException, ParseException;
 
     AuthenticationResponse login(LoginRequest request);
+
+    AuthenticationResponse completeOAuthRegister(CreateUserRequest request);
 
     void logout(LogoutRequest request)
             throws ParseException, JOSEException;
@@ -24,4 +27,6 @@ public interface AuthenticationService {
     void forgotPasswordWithLink(ForgotPasswordRequest request);
 
     ResetPasswordResponse resetPassword(ResetPasswordRequest request);
+
+    String generateToken(User user);
 }

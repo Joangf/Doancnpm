@@ -51,4 +51,4 @@ uploads/
 tmp/
 *.log
 
-
+.env

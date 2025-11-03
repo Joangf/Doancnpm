@@ -67,4 +67,11 @@ public class AuthenticationController {
                 .result(authenticationService.resetPassword(request))
                 .build();
     }
+    
+    @PostMapping("/complete-oauth-register")
+    public ApiResponse<AuthenticationResponse> completeOAuthRegister(@RequestBody CreateUserRequest request) {
+        return  ApiResponse.<AuthenticationResponse>builder()
+                .result(authenticationService.completeOAuthRegister(request))
+                .build();
+    }
 }

@@ -5,6 +5,7 @@ import com.cnpm.eLibrary_service.entity.User;
 import com.cnpm.eLibrary_service.entity.enums.Role;
 import com.cnpm.eLibrary_service.repository.SubscriptionPlanRepository;
 import com.cnpm.eLibrary_service.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
