@@ -33,8 +33,9 @@ public enum ErrorCode {
     EMAIL_NOT_EXISTED(1022, "Email not existed", HttpStatus.BAD_REQUEST),
     ALREADY_VERIFIED(1023, "User already verified", HttpStatus.BAD_REQUEST),
     BORROWNUM_LIMIT_EXCEEDED(1024, "Borrow num exceed limit", HttpStatus.BAD_REQUEST),
-
-    INVALID_PERIOD(1025,"Invalid period, only week or month" ,HttpStatus.BAD_REQUEST );
+    INVALID_PERIOD(1025,"Invalid period, only week or month" ,HttpStatus.BAD_REQUEST ),
+    USER_NOT_FOUND_OAUTH2(1026, "User not found after OAuth login", HttpStatus.BAD_REQUEST),
+    ;
     ErrorCode(int code, String message, HttpStatus statusCode) {
         this.code = code;
         this.message = message;

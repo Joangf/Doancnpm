@@ -1,8 +1,10 @@
 package com.cnpm.eLibrary_service.configuration;
 
+import com.cnpm.eLibrary_service.service.impl.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,13 +25,35 @@ import java.net.http.HttpClient;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private CustomJwtDecoder customJwtDecoder;
+    private final CustomJwtDecoder customJwtDecoder;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+
+
+    private final String[] PUBLIC_POST_ENDPOINTS = {
+            "/api/user",
+            "/api/auth/login",
+            "/api/auth/introspect",
+            "/api/auth/logout",
+            "/api/auth/complete-oauth-register"
+    };
+
+    private static final String[] PUBLIC_GET_ENDPOINTS = {
+            "/api/book",
+            "/api/book/**",
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.authorizeHttpRequests(request ->
-                request.anyRequest().permitAll());
+                request.requestMatchers(HttpMethod.POST, PUBLIC_POST_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS).permitAll()
+                .anyRequest().authenticated());
+
+        httpSecurity.oauth2Login(oauth2 ->
+                oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler));
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults());
@@ -68,9 +92,5 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
-    }
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
     }
 }

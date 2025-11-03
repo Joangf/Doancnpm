@@ -4,10 +4,14 @@ import com.cnpm.eLibrary_service.dto.request.*;
 import com.cnpm.eLibrary_service.dto.response.AuthenticationResponse;
 import com.cnpm.eLibrary_service.dto.response.IntrospectResponse;
 import com.cnpm.eLibrary_service.dto.response.ResetPasswordResponse;
+import com.cnpm.eLibrary_service.entity.SubscriptionPlan;
+import com.cnpm.eLibrary_service.entity.UserSubscription;
 import com.cnpm.eLibrary_service.exception.AppException;
 import com.cnpm.eLibrary_service.exception.ErrorCode;
 import com.cnpm.eLibrary_service.entity.User;
+import com.cnpm.eLibrary_service.repository.SubscriptionPlanRepository;
 import com.cnpm.eLibrary_service.repository.UserRepository;
+import com.cnpm.eLibrary_service.repository.UserSubscriptionRepository;
 import com.cnpm.eLibrary_service.service.AuthenticationService;
 import com.cnpm.eLibrary_service.service.MailService;
 import com.cnpm.eLibrary_service.service.RedisService;
@@ -25,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
@@ -35,6 +40,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
+    private final SubscriptionPlanRepository planRepository;
+    private final UserSubscriptionRepository userSubscriptionRepository;
     private final RedisService redisService;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
@@ -102,6 +109,49 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .role(user.getRole())
                 .token(token)
                 .authenticated(isAuthenticated)
+                .build();
+    }
+
+    @Override
+    public AuthenticationResponse completeOAuthRegister(CreateUserRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_EMAIL_NOT_EXISTED));
+
+
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        }
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setRole(request.getRole());
+
+        userRepository.save(user);
+
+        SubscriptionPlan basicPlan = planRepository.findByName("BASIC")
+                .orElseThrow(() -> new AppException(ErrorCode.PLAN_NOT_EXISTED));
+
+        UserSubscription subscription = UserSubscription.builder()
+                .user(user)
+                .subscriptionPlan(basicPlan)
+                .startDateTime(LocalDateTime.now())
+                .endDateTime(null)
+                .build();
+
+        userSubscriptionRepository.save(subscription);
+
+
+        String token = generateToken(user);
+        return AuthenticationResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .role(user.getRole())
+                .token(token)
+                .authenticated(true)
                 .build();
     }
 
@@ -239,7 +289,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return signedJWT;
     }
 
-    private String generateToken(User user)  {
+    @Override
+    public String generateToken(User user)  {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
