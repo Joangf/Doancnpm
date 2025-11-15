@@ -2,21 +2,22 @@ spring:
   application:
     name: eLibrary_service
 
+
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASS}
-    driver-class-name: com.mysql.cj.jdbc.Driver # Chỉ định rõ driver cho an toàn
+    url: jdbc:mysql://localhost:3306/eLibrary_service
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    # Thêm dialect để Spring biết đang nói chuyện với MySQL
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
+  # --- PHẦN MAIL, GOOGLE, JWT GIỮ NGUYÊN ---
   mail:
     host: smtp.gmail.com
     port: 587
@@ -28,7 +29,6 @@ spring:
           auth: true
           starttls:
             enable: true
-
   security:
     oauth2:
       client:
@@ -44,23 +44,19 @@ spring:
             authorization-uri: https://accounts.google.com/o/oauth2/auth
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
-
-  # -- Elastic Search
   elasticsearch:
     uris: http://localhost:9200
-    connection-timeout: 5s
-    socket-timeout: 10s
-
+  springdoc:
+    swagger-ui:
+      path: /swagger-ui-html
+    api-docs:
+      path: /api-docs
 jwt:
   signerKey: ${JWT_SIGNER_KEY}
   valid-duration: 600000 # in second
   refreshable-duration: 3000 # in second
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui-html
-  api-docs:
-    path: /api-docs
+
 
 frontend:
   base-url: http://localhost:5173
@@ -68,14 +64,18 @@ frontend:
     register-url: http://localhost:5173/oauth-register
     success-url: http://localhost:5173/oauth-success
 
+
 vnpay:
+
   tmnCode: ${VNPAY_TMN_CODE}
   hashSecret: ${VNPAY_HASH_SECRET}
+
   url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
 
-  returnUrl: ${FRONTEND_URL}/payment-result
 
-  ipnUrl: ${RENDER_EXTERNAL_URL}/api/payment/vnpay-callback
+  returnUrl: https://google.com
+
+  ipnUrl: https://subhepatic-kensley-myelinic.ngrok-free.dev/api/payment/vnpay-callback
 
 server:
   port: 8080
