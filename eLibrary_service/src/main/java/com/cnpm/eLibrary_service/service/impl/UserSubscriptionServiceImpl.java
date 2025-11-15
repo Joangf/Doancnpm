@@ -2,6 +2,7 @@ package com.cnpm.eLibrary_service.service.impl;
 
 import com.cnpm.eLibrary_service.dto.request.SubscribeRequest;
 import com.cnpm.eLibrary_service.dto.response.UserSubscriptionResponse;
+import com.cnpm.eLibrary_service.entity.Payment;
 import com.cnpm.eLibrary_service.exception.AppException;
 import com.cnpm.eLibrary_service.exception.ErrorCode;
 import com.cnpm.eLibrary_service.mapper.UserSubscriptionMapper;
@@ -14,12 +15,14 @@ import com.cnpm.eLibrary_service.repository.UserRepository;
 import com.cnpm.eLibrary_service.repository.UserSubscriptionRepository;
 import com.cnpm.eLibrary_service.service.MailService;
 import com.cnpm.eLibrary_service.service.UserSubscriptionService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,6 +73,51 @@ public class UserSubscriptionServiceImpl implements UserSubscriptionService {
     }
 
     @Override
+    @Transactional
+    public UserSubscriptionResponse activateSubscription(Payment successfulPayment) {
+
+        User user = userRepository.findById(successfulPayment.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        SubscriptionPlan plan = planRepository.findById(successfulPayment.getPlanId())
+
+                .orElseThrow(() -> new AppException(ErrorCode.PLAN_NOT_EXISTED));
+
+
+        log.info("Kích hoạt gói mới cho user {}. Tìm và hủy gói cũ...", user.getId());
+        List<UserSubscription> activeSubs = subscriptionRepository
+                .findByUserAndStatus(user, SubscriptionStatus.ACTIVE);
+
+        for (UserSubscription sub : activeSubs) {
+            sub.setStatus(SubscriptionStatus.EXPIRED);
+            subscriptionRepository.save(sub);
+            log.info("Đã hủy gói cũ ID: {}", sub.getId());
+        }
+
+
+
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusDays(plan.getDuration());
+
+        // 4. Tạo UserSubscription mới
+        UserSubscription newSubscription = UserSubscription.builder()
+                .user(user)
+                .subscriptionPlan(plan)
+                .startDateTime(startTime)
+                .endDateTime(endTime)
+                .status(SubscriptionStatus.ACTIVE)
+                .priceAtPurchase(successfulPayment.getAmount())
+                .payment(successfulPayment)
+                .build();
+
+        UserSubscription savedSubscription = subscriptionRepository.save(newSubscription);
+        log.info("Đã kích hoạt gói mới ID: {} cho user {}", savedSubscription.getId(), user.getId());
+
+        return subscriptionMapper.toResponse(savedSubscription);
+    }
+
+
+    @Override
     public void cancelSubscription(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_EXISTED));
@@ -116,5 +164,8 @@ public class UserSubscriptionServiceImpl implements UserSubscriptionService {
         return subscriptionRepository.findBasicPlan(user)
                 .orElseThrow(() -> new AppException(ErrorCode.PLAN_NOT_EXISTED));
     }
+
+
+
 
 }

@@ -41,16 +41,17 @@ public class SecurityConfig {
     private static final String[] PUBLIC_GET_ENDPOINTS = {
             "/api/book",
             "/api/book/**",
+            "/api/payment/vnpay-callback"
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.authorizeHttpRequests(request ->
-//                request.requestMatchers(HttpMethod.POST, PUBLIC_POST_ENDPOINTS).permitAll()
-//                        .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS).permitAll()
-//                .anyRequest().authenticated());
-                request.anyRequest().permitAll());
+                request.requestMatchers(HttpMethod.POST, PUBLIC_POST_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS).permitAll()
+                .anyRequest().authenticated());
+//                request.anyRequest().permitAll());
 
         httpSecurity.oauth2Login(oauth2 ->
                 oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
