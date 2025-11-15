@@ -89,7 +89,7 @@ public class UserSubscriptionServiceImpl implements UserSubscriptionService {
                 .findByUserAndStatus(user, SubscriptionStatus.ACTIVE);
 
         for (UserSubscription sub : activeSubs) {
-            sub.setStatus(SubscriptionStatus.EXPIRED);
+            sub.setStatus(SubscriptionStatus.CANCELLED);
             subscriptionRepository.save(sub);
             log.info("Đã hủy gói cũ ID: {}", sub.getId());
         }

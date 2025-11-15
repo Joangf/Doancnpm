@@ -41,7 +41,12 @@ public class SecurityConfig {
     private static final String[] PUBLIC_GET_ENDPOINTS = {
             "/api/book",
             "/api/book/**",
-            "/api/payment/vnpay-callback"
+            "/api/payment/vnpay-callback",
+
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/**"
     };
 
     @Bean
