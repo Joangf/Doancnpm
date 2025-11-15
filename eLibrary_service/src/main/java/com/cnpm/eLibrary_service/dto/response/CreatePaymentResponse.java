@@ -3,17 +3,11 @@ package com.cnpm.eLibrary_service.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SubscriptionPlanResponse {
-    Long id;
-    String name;
-    Integer maxBorrowNumbers;
-    Integer maxBorrowDays;
-    Integer duration;
-    BigDecimal price;
+public class CreatePaymentResponse {
+    String paymentUrl;
 }

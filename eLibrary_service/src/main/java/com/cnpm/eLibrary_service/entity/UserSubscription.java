@@ -37,4 +37,8 @@ public class UserSubscription {
 
     LocalDateTime lastReminderSentAt;
 
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
 }

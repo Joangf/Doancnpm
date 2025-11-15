@@ -2,6 +2,7 @@ package com.cnpm.eLibrary_service.service;
 
 import com.cnpm.eLibrary_service.dto.request.SubscribeRequest;
 import com.cnpm.eLibrary_service.dto.response.UserSubscriptionResponse;
+import com.cnpm.eLibrary_service.entity.Payment;
 import com.cnpm.eLibrary_service.entity.User;
 import com.cnpm.eLibrary_service.entity.UserSubscription;
 import org.springframework.data.domain.Page;
@@ -14,4 +15,6 @@ public interface UserSubscriptionService {
     Page<UserSubscriptionResponse> getUserSubscriptions(String userId,int page, int size);
 
     UserSubscription getValidSubscription(User user);
+
+    UserSubscriptionResponse activateSubscription(Payment successfulPayment);
 }
