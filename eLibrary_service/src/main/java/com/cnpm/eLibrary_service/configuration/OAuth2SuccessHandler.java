@@ -12,11 +12,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -36,6 +39,21 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
+
+        //Github
+        if(email == null) {
+            String registrationId = ((OAuth2AuthenticationToken)authentication).getAuthorizedClientRegistrationId();
+            if("github".equals(registrationId)) {
+                List<Map<String, Object>> emails = oAuth2User.getAttribute("emails");
+                if (emails != null) {
+                    email = emails.stream()
+                            .filter(e -> Boolean.TRUE.equals(e.get("primary")))
+                            .map(e -> (String) e.get("email"))
+                            .findFirst()
+                            .orElse(null);
+                }
+            }
+        }
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND_OAUTH2));
