@@ -32,10 +32,10 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_POST_ENDPOINTS = {
             "/api/user",
-            "/api/auth/login",
-            "/api/auth/introspect",
-            "/api/auth/logout",
-            "/api/auth/complete-oauth-register"
+            "/api/auth/**",
+            "/api/auth/complete-oauth-register",
+            "/api/book/filter",
+            "/api/book/search"
     };
 
     private static final String[] PUBLIC_GET_ENDPOINTS = {
