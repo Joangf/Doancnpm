@@ -12,6 +12,8 @@ public interface UserService {
 
     UserResponse getUserInfo(String id);
 
+    UserResponse getMyInfo();
+
     Page<UserResponse> getAllUsers(int page, int size);
 
     UserResponse updateUser(String id, UpdateUserRequest request);
