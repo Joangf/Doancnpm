@@ -24,7 +24,7 @@ const Library = ({ borrowedBooks }) => {
 };
 
 const Subscription = ({ subscriptionPlan }) => {
-  const handlePayment = async () => {
+  const handlePayment = async (id) => {
     try {
       const response = await fetch(`${API_URL}/payment/create-payment`, {
         method: "POST",
@@ -32,7 +32,7 @@ const Subscription = ({ subscriptionPlan }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
-        body: JSON.stringify({ planId: 2 }),
+        body: JSON.stringify({ planId: id }),
       });
       if (response.ok) {
         const data = await response.json();
@@ -47,69 +47,71 @@ const Subscription = ({ subscriptionPlan }) => {
       <div className="profile-header">
         <h1>Subscription</h1>
       </div>
+      {subscriptionPlan.map((plan) => (
+        <div className="subscription-wrapper">
+          <div className="plan-card">
+            <div className="plan-badge">Best Value</div>
+            <h2 className="plan-title">{plan.name}</h2>
+            <p className="plan-subtitle">
+              Unlock the full potential of your reading journey
+            </p>
 
-      <div className="subscription-wrapper">
-        <div className="plan-card">
-          <div className="plan-badge">Best Value</div>
-          <h2 className="plan-title">Gold Member</h2>
-          <p className="plan-subtitle">
-            Unlock the full potential of your reading journey
-          </p>
+            <h3 className="plan-price">
+              {plan.price}đ<span>/month</span>
+            </h3>
 
-          <h3 className="plan-price">
-            $9.99<span>/month</span>
-          </h3>
+            <div className="plan-divider"></div>
 
-          <div className="plan-divider"></div>
+            <ul className="plan-features">
+              <li>
+                <span className="check-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                </span>
+                Increased Borrowing ({plan.maxBorrowNumbers} books)
+              </li>
+              <li>
+                <span className="check-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                </span>
+                Extended Due Dates ({plan.maxBorrowDays} days)
+              </li>
+              <li>
+                <span className="check-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                </span>
+                Premium Support
+              </li>
+              <li>
+                <span className="check-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                </span>
+                No Late Fees
+              </li>
+              <li>
+                <span className="check-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                </span>
+                Early Access to New Arrivals
+              </li>
+            </ul>
 
-          <ul className="plan-features">
-            <li>
-              <span className="check-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-              </span>
-              Unlimited Borrowing
-            </li>
-            <li>
-              <span className="check-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-              </span>
-              Extended Due Dates
-            </li>
-            <li>
-              <span className="check-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-              </span>
-              Premium Support
-            </li>
-            <li>
-              <span className="check-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-              </span>
-              No Late Fees
-            </li>
-            <li>
-              <span className="check-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-              </span>
-              Early Access to New Arrivals
-            </li>
-          </ul>
-
-          <button className="subscribe-btn" onClick={handlePayment}>
-            Upgrade Now
-          </button>
+            <button className="subscribe-btn" onClick={() => handlePayment(plan.id)}>
+              Upgrade Now
+            </button>
+          </div>
         </div>
-      </div>
+
+      ))}
     </main>
   );
 };
@@ -305,6 +307,7 @@ const UserProfile = ({ isLoggedIn, setIsLoggedIn }) => {
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const [activeTab, setActiveTab] = useState("profile");
   const [activeSubscriptionPlan, setActiveSubscriptionPlan] = useState(null);
+  const [subscription, setSubscription] = useState(null);
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -365,15 +368,29 @@ const UserProfile = ({ isLoggedIn, setIsLoggedIn }) => {
           "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
         },
       });
-      const data = await response.json();
-      console.log("Subscription data:", data);
       if (response.ok) {
+        const data = await response.json();
         const activeSub = data.result.content.find(sub => sub.status === 'ACTIVE');
         console.log("Active subscription:", activeSub);
         setActiveSubscriptionPlan(activeSub.planName || 'BASIC');
       }
     } catch (error) {
       console.error("Error fetching subscription data:", error);
+    }
+    try {
+      const response = await fetch(`${API_URL}/subscription-plan`, 
+        {
+          headers:{
+            "Authorization": `Bearer ${localStorage.getItem('authToken')}`
+          }
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setSubscription(data.result.filter(plan => plan.id !== 1));
+      }
+    } catch (error) {
+      console.error("Error fetching subscription plan:", error);
     }
   };
 
@@ -564,7 +581,7 @@ const UserProfile = ({ isLoggedIn, setIsLoggedIn }) => {
           />
         )}
         {activeTab === "library" && <Library borrowedBooks={borrowedBooks} />}
-        {activeTab === "subscription" && <Subscription />}
+        {activeTab === "subscription" && <Subscription subscriptionPlan={subscription}/>}
       </div>
     </div>
   );
