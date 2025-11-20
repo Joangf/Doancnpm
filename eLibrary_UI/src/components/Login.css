@@ -394,36 +394,6 @@
 }
 
 /* General Responsive Design */
-@media (max-width: 768px) {
-  .login-page {
-    padding: 15px;
-  }
-  
-  .login-container {
-    max-width: 400px;
-  }
-  
-  .login-header {
-    padding: 15px 20px;
-  }
-  
-  .auth-content {
-    padding: 20px;
-  }
-  
-  .form-row {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .logo-keazon {
-    font-size: 20px;
-  }
-  
-  .logo-books {
-    font-size: 12px;
-  }
-}
 
 @media (max-width: 480px) {
   .login-container {
@@ -455,4 +425,77 @@
   font-size: 14px;
   margin-top: -5px;
   margin-bottom: 10px;
+}
+/* The line separator with text in the middle */
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #888;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.separator span {
+  padding: 0 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Google Button Styling */
+.google-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: white;
+  color: #3c4043;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 15px;
+}
+
+.google-login-btn:hover {
+  background-color: #f7f8f8;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  border-color: #d2e3fc;
+}
+
+.google-icon {
+  display: flex;
+  margin-right: 10px;
+}
+
+.github-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #24292e; /* GitHub Dark Color */
+  color: #ffffff;
+  border: 1px solid #555; /* Lighter border to pop against dark background */
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 15px;
+}
+
+.github-login-btn:hover {
+  background-color: #2f363d;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  border-color: #888;
 }

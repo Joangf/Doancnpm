@@ -269,3 +269,18 @@
     padding: 0 40px;
   }
 }
+@media (max-width: 600px) {
+  .action-button {
+    display: none;
+  }
+
+  .logo-books {
+    display: none;
+  }
+  .logo-keazon {
+    display: none;
+  }
+
+
+  
+}

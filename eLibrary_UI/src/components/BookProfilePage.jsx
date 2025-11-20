@@ -9,7 +9,13 @@ const BookProfilePage = ({ isLoggedIn, setIsLoggedIn }) => {
   const [alreadyBorrowedBookId, setAlreadyBorrowedBookId] = useState([]);
   const fetchBorrowedBook = async () => {
     try{
-      const response = await fetch(`${API_URL}/borrow/user/${localStorage.getItem('idUser')}`);
+      const response = await fetch(`${API_URL}/borrow/user/${localStorage.getItem('idUser')}`,{
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+      });
       const data = await response.json();
       if(!response.ok){
         console.log('Fetching borrowed books failed');
@@ -23,7 +29,6 @@ const BookProfilePage = ({ isLoggedIn, setIsLoggedIn }) => {
   } 
   useEffect(() => {
     if (isLoggedIn) {
-      console.log(isLoggedIn);
       fetchBorrowedBook();
     } else {
       setAlreadyBorrowedBookId([]);

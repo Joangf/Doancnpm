@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, use } from 'react';
 import './BookProfile.css';
 import { Link } from "react-router-dom";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
@@ -12,16 +12,47 @@ const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLog
   const [borrowButtonText, setBorrowButtonText] = useState("Borrow Book");
   const [activeTab, setActiveTab] = useState('details');
   const [book, setBook] = useState({});
-  const StarIcon = ({ filled = true, size = "20" }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  const [userRating, setUserRating] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+
+  const StarIcon = ({ filled = true, size = "20", onStarClick, starRating, fetchBook }) => (
+    <svg 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={isLoggedIn ? onStarClick : undefined}
+      style={{
+        cursor: isLoggedIn ? 'pointer' : 'not-allowed',
+      }}
+    >
       <path
         d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.62L12 2L9.19 8.62L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-        fill={filled ? "#FFD700" : "#555"} // Industrial gold for filled, dark gray for outline
-        stroke={!filled ? "#888" : "none"} // Slightly lighter gray stroke for unfilled
+        fill={filled ? "#FFD700" : "#555"} 
+        stroke={!filled ? "#888" : "none"} 
         strokeWidth={!filled ? "1" : "0"}
       />
     </svg>
   );
+  const handleRating = async (rating) => {
+    try {
+      await fetch(`${API_URL}/rating/${localStorage.getItem('idUser')}/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({
+          rating: rating
+        }),
+      });
+      await fetchBook();
+      setUserRating(rating);
+    } catch (error) {
+      console.error("Failed to send rating:", error);
+    }
+  };
 
   const PlayIcon = () => (
     <svg onMouseEnter={()=> {
@@ -67,11 +98,13 @@ const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLog
       bookId: book.id,
       borrowDays: selectedDays
     };
-    console.log(request);
     try{
       const response = await fetch(`${API_URL}/borrow`,{
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
         body: JSON.stringify(request),
       });
       if(!response.ok) {
@@ -80,7 +113,6 @@ const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLog
         setTimeout(() => setBorrowDone(''), 2000);
         return;
       }
-      console.log(request);
       setAlreadyBorrowedBookId(prev => prev ? [...prev, book.id] : [book.id]
       );      
       setBorrowDone('success');
@@ -93,19 +125,23 @@ const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLog
 
   // Generate an array of numbers from 1 to 30 for the dropdown
   const daysOptions = Array.from({ length: 30 }, (_, i) => i + 1);
-  useEffect(()=>{
-    const fetchBook = async () =>{
-      try{
-        const response = await fetch(`${API_URL}/book/${id}`);
-        const data = await response.json();
-        if(!response.ok){
-          console.log('Fetching failed');
-        }
-        setBook(data.result);
+  const fetchBook = async () =>{
+    try{
+      const response = await fetch(`${API_URL}/book/${id}`);
+      const data = await response.json();
+      if(!response.ok){
+        console.log('Fetching failed');
       }
-      catch{
+      setBook(data.result);
+      if (data.result.averageRating) {
+        setUserRating(data.result.averageRating);
+        setAverageRating(data.result.averageRating);
       }
     }
+    catch{
+    }
+  }
+  useEffect(()=>{
     fetchBook();
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)){
@@ -142,12 +178,17 @@ const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLog
               <div className="book-rating-stats">
                 <div className="rating-section">
                   <div className="stars">
-                    <StarIcon filled={true} size="20" />
-                    <StarIcon filled={true} size="20" />
-                    <StarIcon filled={true} size="20" />
-                    <StarIcon filled={true} size="20" />
-                    <StarIcon filled={false} size="20" />
-                    <span className="rating-value">4.0</span>
+                    {[...Array(5)].map((_, index) => (
+                      <StarIcon 
+                        key={index}
+                        filled={index < (userRating || book.rating)}
+                        size="20"
+                        onStarClick={() => handleRating(index + 1)}
+                        starRating={index + 1}
+                        fetchBook={fetchBook}
+                      />
+                    ))}
+                    <span className="rating-value">{ averageRating ? averageRating.toFixed(1) : 'N/A'}</span>
                   </div>
                 </div>
                 
