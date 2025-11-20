@@ -1,6 +1,5 @@
 package com.cnpm.eLibrary_service.configuration;
 
-import com.cnpm.eLibrary_service.service.impl.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +25,7 @@ import java.net.http.HttpClient;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomJwtDecoder customJwtDecoder;
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final com.cnpm.eLibrary_service.configuration.CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
 
