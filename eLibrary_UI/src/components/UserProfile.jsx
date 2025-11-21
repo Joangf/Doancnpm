@@ -23,7 +23,7 @@ const Library = ({ borrowedBooks }) => {
   );
 };
 
-const Subscription = ({ subscriptionPlan }) => {
+const Subscription = ({ subscriptionPlan, activeSubscriptionPlan }) => {
   const handlePayment = async (id) => {
     try {
       const response = await fetch(`${API_URL}/payment/create-payment`, {
@@ -36,6 +36,7 @@ const Subscription = ({ subscriptionPlan }) => {
       });
       if (response.ok) {
         const data = await response.json();
+        localStorage.setItem('currentPlanId', id);
         window.location.href = data.result.paymentUrl;
       }
     } catch (error) {
@@ -105,8 +106,10 @@ const Subscription = ({ subscriptionPlan }) => {
               </li>
             </ul>
 
-            <button className="subscribe-btn" onClick={() => handlePayment(plan.id)}>
-              Upgrade Now
+            <button className="subscribe-btn" 
+            disabled={activeSubscriptionPlan.includes(plan.name)}
+            onClick={() => activeSubscriptionPlan == plan.name ? null : handlePayment(plan.id)}>
+              {activeSubscriptionPlan.includes(plan.name) ? 'You had this plan' : 'Subscribe Now'}
             </button>
           </div>
         </div>
@@ -371,7 +374,7 @@ const UserProfile = ({ isLoggedIn, setIsLoggedIn }) => {
       if (response.ok) {
         const data = await response.json();
         const activeSub = data.result.content.find(sub => sub.status === 'ACTIVE');
-        setActiveSubscriptionPlan(activeSub.planName || 'BASIC');
+        setActiveSubscriptionPlan(activeSub?.planName || 'BASIC');
       }
     } catch (error) {
       console.error("Error fetching subscription data:", error);
@@ -580,7 +583,7 @@ const UserProfile = ({ isLoggedIn, setIsLoggedIn }) => {
           />
         )}
         {activeTab === "library" && <Library borrowedBooks={borrowedBooks} />}
-        {activeTab === "subscription" && <Subscription subscriptionPlan={subscription}/>}
+        {activeTab === "subscription" && <Subscription subscriptionPlan={subscription} activeSubscriptionPlan={activeSubscriptionPlan} />}
       </div>
     </div>
   );

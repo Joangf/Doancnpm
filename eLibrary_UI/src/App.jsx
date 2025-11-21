@@ -13,6 +13,7 @@ import UserProfile from './components/UserProfile'
 import BookProfilePage from './components/BookProfilePage'
 import OAuthSuccess from './OAuthSuccess';
 import OAuthRegister from './OAuthRegister';
+import Payment from './Payment';
 const Home = ({isLoggedIn, setIsLoggedIn, size=24}) => {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -105,6 +106,7 @@ function App() {
         <Route path ="/book/:id" element={<BookProfilePage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/> }/>
         <Route path ="/oauth-success" element={<OAuthSuccess setIsLoggedIn={setIsLoggedIn} />} />
         <Route path ="/oauth-register" element={<OAuthRegister setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path ="/payment" element={<Payment />} />
       </Routes>
     </BrowserRouter>
   )
