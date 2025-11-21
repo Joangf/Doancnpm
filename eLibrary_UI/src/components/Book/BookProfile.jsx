@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, use } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './BookProfile.css';
 import { Link } from "react-router-dom";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
-import TickingFail from './TickingFail';
-import TickingSuccess from './TickingSuccess';
+import TickingFail from '../../utils/TickingFail';
+import TickingSuccess from '../../utils/TickingSuccess';
 const BookProfile = ({id, alreadyBorrowedBookId, setAlreadyBorrowedBookId, isLoggedIn}) => {
   const dropdownRef = useRef(null);
   const [borrowDone, setBorrowDone] = useState('');

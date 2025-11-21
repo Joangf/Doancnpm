@@ -1,5 +1,5 @@
-import "../Login.css";
-import AnimatedSubmitButton from "../AnimatedSubmitButton";
+import "../../pages/Login.css";
+import AnimatedSubmitButton from "../../utils/AnimatedSubmitButton";
 
 const GOOGLE = import.meta.env.VITE_GOOGLE_URL;
 const GITHUB = import.meta.env.VITE_GITHUB_URL;

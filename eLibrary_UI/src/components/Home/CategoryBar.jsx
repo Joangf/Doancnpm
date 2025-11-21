@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import './CategoryBar.css';
 
 const CategoryBar = ({ categories, activeCategories, setActiveCategory }) => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
-import TickingFail from "./components/TickingFail";
-import TickingSuccess from "./components/TickingSuccess";
+import TickingFail from "../utils/TickingFail";
+import TickingSuccess from "../utils/TickingSuccess";
 const handlePaymentSuccess = async (setPaymentStatus) => {
   const planId = localStorage.getItem('currentPlanId');
   const idUser = localStorage.getItem('idUser');

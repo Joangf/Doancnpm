@@ -1,6 +1,6 @@
-import "../Login.css";
-import AnimatedSubmitButton from "../AnimatedSubmitButton";
-const Reg = ({formData ,handleSubmit, handleInputChange, isLoading, invalidSubmit }) => (
+import "../../pages/Login.css";
+import AnimatedSubmitButton from "../../utils/AnimatedSubmitButton";
+const Reg = ({ formData ,handleSubmit, handleInputChange, isLoading, invalidSubmit }) => (
   <form onSubmit={handleSubmit} className="auth-form">
     <div className="form-row">
       <div className="form-group">

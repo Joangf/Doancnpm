@@ -1,6 +1,6 @@
-import "../Login.css";
-import AnimatedSubmitButton from "../AnimatedSubmitButton";
-const Forgot = ({formData ,handleSubmit, handleInputChange, isLoading, setActiveTab, invalidSubmit }) => (
+import "../../pages/Login.css";
+import AnimatedSubmitButton from "../../utils/AnimatedSubmitButton";
+const Forgot = ({ formData ,handleSubmit, handleInputChange, isLoading, setActiveTab, invalidSubmit }) => (
   <form onSubmit={handleSubmit} className="auth-form">
     <div className="form-group">
       <label htmlFor="email">Email</label>

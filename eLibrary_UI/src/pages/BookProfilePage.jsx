@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from './Navbar';
-import BookProfile from './BookProfile';
+import { useEffect, useState } from 'react';
+import Navbar from '../components/Home/Navbar';
+import BookProfile from '../components/Book/BookProfile';
 import './BookProfilePage.css';
 import { useParams } from 'react-router-dom';
 const API_URL = import.meta.env.VITE_BACKEND_URL;

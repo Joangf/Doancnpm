@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import "./components/Login.css"
-import TickingSuccess from "./components/TickingSuccess";
-import Register from "./components/AuthForm/Reg"
+import "../pages/Login.css";
+import TickingSuccess from "../utils/TickingSuccess";
+import Register from "../components/AuthForm/Reg"
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -21,13 +21,12 @@ const OAuthRegister = ({ setIsLoggedIn }) => {
   const [invalidSubmit, setInvalidSubmit] = useState(false);
   const [params] = useSearchParams();
   
-  // You might want to pre-fill email/names if getting them from OAuth query params
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     firstName: "",
     lastName: "",
-    email: "", // Could be pre-filled from OAuth provider
+    email: "",
     role: "USER",
     confirmPassword: "",
     otp: ''
