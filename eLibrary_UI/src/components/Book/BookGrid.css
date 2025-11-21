@@ -1,7 +1,7 @@
 /* Main Section Styling */
 .book-grid.industrial-theme {
   width: 100%;
-  padding: var(--pad1) 0;
+  padding: var(--pad1) 0 40px 0;
   background: var(--color); /* Consistent dark background */
   font-family: 'Roboto', sans-serif;
 }
@@ -18,7 +18,7 @@
   color: #E0E0E0;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin: 0 0 30px 0;
+  margin: 0 0 40px 0;
   padding-bottom: 15px;
   border-bottom: 2px solid #333;
 }
@@ -133,5 +133,41 @@
   }
   .overlay-author {
     font-size: 12px;
+  }
+}
+
+/* SKELETON LOADING ANIMATION */
+
+/* 1. Override basic styles for the skeleton state */
+.book-grid-item.skeleton-loader {
+  cursor: default;
+  border: none;
+  box-shadow: none;
+  background-color: #2a2a2a; /* Base dark gray */
+  
+  /* The Shimmer Gradient */
+  background-image: linear-gradient(
+    90deg, 
+    #2a2a2a 0px, 
+    #3f3f3f 50%, 
+    #2a2a2a 100%
+  );
+  background-size: 200% 100%; /* Make background large enough to slide */
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Disable hover effects on skeletons */
+.book-grid-item.skeleton-loader:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* 2. Define the animation keyframes */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

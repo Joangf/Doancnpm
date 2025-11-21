@@ -1,6 +1,6 @@
-import "../Login.css";
-import AnimatedSubmitButton from "../AnimatedSubmitButton";
-const OTP = ({formData ,handleSubmit, handleInputChange, isLoading, invalidSubmit, setActiveTab }) => (
+import "../../pages/Login.css";
+import AnimatedSubmitButton from "../../utils/AnimatedSubmitButton";
+const OTP = ({ formData ,handleSubmit, handleInputChange, isLoading, invalidSubmit, setActiveTab }) => (
   <form onSubmit={handleSubmit} className="auth-form">
     <div className="form-group">
       <p>

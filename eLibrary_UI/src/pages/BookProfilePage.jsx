@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from './Navbar';
-import BookProfile from './BookProfile';
+import { useEffect, useState } from 'react';
+import Navbar from '../components/Home/Navbar';
+import BookProfile from '../components/Book/BookProfile';
 import './BookProfilePage.css';
 import { useParams } from 'react-router-dom';
 const API_URL = import.meta.env.VITE_BACKEND_URL;
@@ -9,7 +9,13 @@ const BookProfilePage = ({ isLoggedIn, setIsLoggedIn }) => {
   const [alreadyBorrowedBookId, setAlreadyBorrowedBookId] = useState([]);
   const fetchBorrowedBook = async () => {
     try{
-      const response = await fetch(`${API_URL}/borrow/user/${localStorage.getItem('idUser')}`);
+      const response = await fetch(`${API_URL}/borrow/user/${localStorage.getItem('idUser')}`,{
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+      });
       const data = await response.json();
       if(!response.ok){
         console.log('Fetching borrowed books failed');
@@ -23,7 +29,6 @@ const BookProfilePage = ({ isLoggedIn, setIsLoggedIn }) => {
   } 
   useEffect(() => {
     if (isLoggedIn) {
-      console.log(isLoggedIn);
       fetchBorrowedBook();
     } else {
       setAlreadyBorrowedBookId([]);

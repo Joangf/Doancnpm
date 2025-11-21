@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import react from '../assets/react.svg'
-import TickingSuccess from "./TickingSuccess";
-import Log from "./AuthForm/Log"
-import Register from "./AuthForm/Reg"
-import OTP from "./AuthForm/OTP";
-import Forgot from "./AuthForm/Forgot";
-import Reset from "./AuthForm/Reset";
+import TickingSuccess from "../utils/TickingSuccess";
+import Log from "../components/AuthForm/Log"
+import Register from "../components/AuthForm/Reg"
+import OTP from "../components/AuthForm/OTP";
+import Forgot from "../components/AuthForm/Forgot";
+import Reset from "../components/AuthForm/Reset";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 const LogoIcon = () => (
   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">

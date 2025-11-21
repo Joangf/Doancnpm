@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 const API_URL = import.meta.env.VITE_BACKEND_URL;
@@ -148,7 +148,7 @@ const Navbar = ({isLoggedIn, setIsLoggedIn, activeCategories}) => {
               ref={searchInputRef}
               type="text"
               className="search-input"
-              placeholder="Search for books by title or author..."
+              placeholder="Search..."
               value={searchValue}
               onChange={handleSearchChange}
               onFocus={handleSearchFocus}

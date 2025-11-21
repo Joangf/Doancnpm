@@ -1,0 +1,82 @@
+/* --- Session Paused / Lock Screen --- */
+
+.session-paused-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1A1A1A; /* Matches main page background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Ensures it covers everything */
+}
+
+.session-paused-card {
+  background: #242424;
+  border: 2px solid #FFD700; /* Gold border to signal alert/system status */
+  border-radius: 12px;
+  padding: 50px 40px;
+  width: 90%;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  animation: scaleIn 0.3s ease;
+}
+
+.session-icon {
+  color: #FFD700;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.3));
+}
+
+.session-title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #E0E0E0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.session-text {
+  color: #A0A0A0;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.refresh-btn {
+  background: #FFD700;
+  color: #1A1A1A;
+  font-size: 16px;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.refresh-btn:hover {
+  background: #FFE44D;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.refresh-btn:disabled {
+  background: #444;
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
