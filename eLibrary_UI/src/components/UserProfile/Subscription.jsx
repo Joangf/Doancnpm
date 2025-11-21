@@ -1,4 +1,5 @@
 import "../../pages/UserProfilePage.css";
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 const Subscription = ({ subscriptionPlan, activeSubscriptionPlan }) => {
   const handlePayment = async (id) => {
     try {
