@@ -39,11 +39,21 @@ spring:
             scope:
               - email
               - profile
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope:
+              - read:user
+              - user:email
         provider:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/auth
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
   elasticsearch:
     uris: http://localhost:9200
   springdoc:
@@ -53,8 +63,8 @@ spring:
       path: /api-docs
 jwt:
   signerKey: ${JWT_SIGNER_KEY}
-  valid-duration: 600000 # in second
-  refreshable-duration: 3000 # in second
+  valid-duration: 300 # in second
+  refreshable-duration: 1800 # in second
 
 
 
@@ -73,7 +83,7 @@ vnpay:
   url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
 
 
-  returnUrl: https://google.com
+  returnUrl: http://localhost:5173/payment
 
   ipnUrl: https://subhepatic-kensley-myelinic.ngrok-free.dev/api/payment/vnpay-callback
 

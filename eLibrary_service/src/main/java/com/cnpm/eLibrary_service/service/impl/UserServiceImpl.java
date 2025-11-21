@@ -21,6 +21,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +77,16 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserInfo(String id) {
         User user =userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_EXISTED));
+        return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public UserResponse getMyInfo(){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_EXISTED));
+
         return userMapper.toUserResponse(user);
     }
 

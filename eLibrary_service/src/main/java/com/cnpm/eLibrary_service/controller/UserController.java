@@ -32,6 +32,13 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/my-info")
+    public ApiResponse<UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+    }
+
     @GetMapping
     public ApiResponse<Page<UserResponse>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
