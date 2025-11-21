@@ -26,15 +26,25 @@ const CategoryBar = ({ categories, activeCategories, setActiveCategory }) => {
     <div className="category-bar industrial-theme">
       <div className="category-bar-content">
         <div className="categories-container">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              className={`category-button ${activeCategories.map(activeCategory => activeCategory.name).includes(category.name) ? 'active' : ''}`}
-              onClick={() => handleCategoryClick(category)}
-            >
-              {category.name}
-            </button>
-          ))}
+          {categories.length > 0 ?
+            (categories.map((category) => (
+              <button
+                key={category.id}
+                className={`category-button ${activeCategories.map(activeCategory => activeCategory.name).includes(category.name) ? 'active' : ''}`}
+                onClick={() => handleCategoryClick(category)}
+              >
+                {category.name}
+              </button>
+          ))): 
+            (
+              <button
+                className={`category-button active`}
+            
+              >
+                Loading...
+              </button>
+            )
+          }
         </div>
       </div>
     </div>

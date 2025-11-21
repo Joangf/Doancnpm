@@ -148,7 +148,7 @@ const Navbar = ({isLoggedIn, setIsLoggedIn, activeCategories}) => {
               ref={searchInputRef}
               type="text"
               className="search-input"
-              placeholder="Search for books by title or author..."
+              placeholder="Search..."
               value={searchValue}
               onChange={handleSearchChange}
               onFocus={handleSearchFocus}

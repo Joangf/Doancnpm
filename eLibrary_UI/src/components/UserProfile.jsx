@@ -48,7 +48,7 @@ const Subscription = ({ subscriptionPlan }) => {
         <h1>Subscription</h1>
       </div>
       {subscriptionPlan.map((plan) => (
-        <div className="subscription-wrapper">
+        <div key={plan.id} className="subscription-wrapper">
           <div className="plan-card">
             <div className="plan-badge">Best Value</div>
             <h2 className="plan-title">{plan.name}</h2>
@@ -371,7 +371,6 @@ const UserProfile = ({ isLoggedIn, setIsLoggedIn }) => {
       if (response.ok) {
         const data = await response.json();
         const activeSub = data.result.content.find(sub => sub.status === 'ACTIVE');
-        console.log("Active subscription:", activeSub);
         setActiveSubscriptionPlan(activeSub.planName || 'BASIC');
       }
     } catch (error) {

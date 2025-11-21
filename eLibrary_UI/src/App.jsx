@@ -71,18 +71,20 @@ const Home = ({isLoggedIn, setIsLoggedIn, size=24}) => {
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} activeCategories={activeCategories}/>
 
       {categories && (<CategoryBar categories={categories} activeCategories={activeCategories} setActiveCategory={setActiveCategory}/>)}
-      {books && (<BookSlider books={books} />)}
-      {books && (<BookGrid books={books} />)}
+      <BookSlider books={books} isLoading={books.length === 0} />
+      <BookGrid books={books} secMargin='0px' />
       <InfiniteScroll
         dataLength={books.length}
         next={() => setPage(prevPage => prevPage + 1) }
         hasMore={hasMore}
-        loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
-        endMessage={<main className="main-content">
-        <span className="logo-keazon">KeazoN</span>
-        <span className="logo-books">BOOKS</span>
-      </main>}
+        loader={<BookGrid isLoading={true} displaySecTitle={false} pad1='0px' />}
       />
+      {hasMore === false && (
+        <main className="main-content">
+          <span className="logo-keazon">KeazoN</span>
+          <span className="logo-books">BOOKS</span>
+        </main>
+      )}
 
     </div>
   )

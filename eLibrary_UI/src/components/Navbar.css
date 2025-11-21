@@ -280,6 +280,9 @@
   .logo-keazon {
     display: none;
   }
+  .search-section {
+    min-width: 30%;
+  }
 
 
   
