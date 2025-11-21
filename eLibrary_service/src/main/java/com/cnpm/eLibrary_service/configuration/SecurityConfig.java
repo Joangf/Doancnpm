@@ -49,7 +49,8 @@ public class SecurityConfig {
 
             "/oauth2/**",
             "/login/oauth2/code/**",
-            "/oauth2/authorization/**"
+            "/oauth2/authorization/**",
+            "/api/category"
     };
 
     @Bean

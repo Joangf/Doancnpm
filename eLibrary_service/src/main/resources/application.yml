@@ -63,8 +63,8 @@ spring:
       path: /api-docs
 jwt:
   signerKey: ${JWT_SIGNER_KEY}
-  valid-duration: 600000 # in second
-  refreshable-duration: 3000 # in second
+  valid-duration: 300 # in second
+  refreshable-duration: 1800 # in second
 
 
 
@@ -83,7 +83,7 @@ vnpay:
   url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
 
 
-  returnUrl: https://google.com
+  returnUrl: http://localhost:5173/payment
 
   ipnUrl: https://subhepatic-kensley-myelinic.ngrok-free.dev/api/payment/vnpay-callback
 
