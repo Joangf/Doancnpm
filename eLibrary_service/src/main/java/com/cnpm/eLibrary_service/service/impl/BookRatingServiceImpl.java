@@ -60,4 +60,22 @@ public class BookRatingServiceImpl implements BookRatingService {
                 .averageRating(book.getAverageRating())
                 .build();
     }
+
+    @Override
+    public void deleteRating(String userId, Long bookId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_EXISTED));
+
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+
+        BookRating existingRatingOpt = ratingRepository.findByUserAndBook(user,book)
+                .orElseThrow(() -> new AppException(ErrorCode.RATING_NOT_EXISTED));
+
+            ratingRepository.delete(existingRatingOpt);
+
+            Double avg = ratingRepository.findAverageRatingByBookId(book.getId());
+            book.setAverageRating(avg != null ? avg : 0.0);
+            bookRepository.save(book);
+    }
 }

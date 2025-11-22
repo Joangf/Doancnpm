@@ -5,4 +5,6 @@ import com.cnpm.eLibrary_service.dto.response.RateBookResponse;
 
 public interface BookRatingService {
     RateBookResponse rateBook(String userId, Long bookId, RateBookRequest request);
+
+    void deleteRating(String userId, Long bookId);
 }

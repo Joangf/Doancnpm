@@ -22,4 +22,15 @@ public class BookRatingController {
                 .result(bookRatingService.rateBook(userId,bookId,request))
                 .build();
     }
+
+    @DeleteMapping("/{userId}/{bookId}")
+    public ApiResponse<String> deleteRating(
+            @PathVariable String userId,
+            @PathVariable Long bookId
+    ) {
+        bookRatingService.deleteRating(userId, bookId);
+        return ApiResponse.<String>builder()
+                .result("Rating deleted successfully")
+                .build();
+    }
 }

@@ -94,8 +94,6 @@ public class UserSubscriptionServiceImpl implements UserSubscriptionService {
             log.info("Đã hủy gói cũ ID: {}", sub.getId());
         }
 
-
-
         LocalDateTime startTime = LocalDateTime.now();
         LocalDateTime endTime = startTime.plusDays(plan.getDuration());
 
@@ -159,13 +157,7 @@ public class UserSubscriptionServiceImpl implements UserSubscriptionService {
                 return sub;
             }
         }
-
-
         return subscriptionRepository.findBasicPlan(user)
                 .orElseThrow(() -> new AppException(ErrorCode.PLAN_NOT_EXISTED));
     }
-
-
-
-
 }

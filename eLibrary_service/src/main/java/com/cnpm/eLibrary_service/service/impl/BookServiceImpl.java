@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,23 +43,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponse createBook(BookRequest request) {
-        // Map request → entity
+
         Book book = bookMapper.toBook(request);
 
         if (request.getCategoryNames() == null || request.getCategoryNames().isEmpty()) {
             throw new AppException(ErrorCode.BOOK_MUST_HAVE_CATEGORY);
         }
 
-        // Lấy categories từ DB theo Names
-        Set<Category> categories = categoryRepository.findAllByNameIn(request.getCategoryNames())
-                .stream().collect(Collectors.toSet());
 
-        // Validate: nếu có id không tồn tại
+        Set<Category> categories = new HashSet<>(categoryRepository.findAllByNameIn(request.getCategoryNames()));
+
+
         if (categories.size() != request.getCategoryNames().size()) {
             throw new AppException(ErrorCode.CATEGORY_NAME_NOT_EXISTED);
         }
 
-        // Gắn categories vào book
+
         book.setCategories(categories);
 
         Book savedBook =  bookRepository.save(book);
@@ -93,20 +93,18 @@ public class BookServiceImpl implements BookService {
         bookMapper.updateBook(request, book);
 
         // update categories nếu request có gửi
-        if (request.getCategoryNames() != null) {
-            if (request.getCategoryNames().isEmpty()) {
-                throw new AppException(ErrorCode.BOOK_MUST_HAVE_CATEGORY);
-            }
-
-            Set<Category> categories = categoryRepository.findAllByNameIn(request.getCategoryNames())
-                    .stream().collect(Collectors.toSet());
-
-            if (categories.size() != request.getCategoryNames().size()) {
-                throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
-            }
-            book.setCategories(categories);
-
+        if (request.getCategoryNames() == null || request.getCategoryNames().isEmpty()) {
+            throw new AppException(ErrorCode.BOOK_MUST_HAVE_CATEGORY);
         }
+
+        Set<Category> categories = new HashSet<>(categoryRepository.findAllByNameIn(request.getCategoryNames()));
+
+        if (categories.size() != request.getCategoryNames().size()) {
+            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
+        }
+        book.setCategories(categories);
+
+
 
         Book updatedBook = bookRepository.save(book);
 
@@ -150,11 +148,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public Page<BookResponse> filterBooks(BookFilterRequest request, int page, int size) {
         List<Long> categoryIds = request.getCategoryIds();
-
-        if (categoryIds == null || categoryIds.isEmpty()) {
-            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
-        }
-
 
         List<Category> categories = categoryRepository.findAllById(categoryIds);
         if (categories.isEmpty() || categories.size() != categoryIds.size())

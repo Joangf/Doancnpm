@@ -32,16 +32,12 @@ public class CustomJwtDecoder implements JwtDecoder {
         if (token == null || token.trim().isEmpty()) {
             throw new JwtException("Missing token");
         }
-        try {
-            var response = authenticationService.introspect(IntrospectRequest.builder()
+        var response = authenticationService.introspect(IntrospectRequest.builder()
                     .token(token)
                     .build());
 
-            if(!response.isValid())
-                throw new JwtException("Token invalid");
-        } catch (JOSEException | ParseException e) {
-            throw new JwtException(e.getMessage());
-        }
+        if(!response.isValid())
+            throw new JwtException("Token invalid");
         if(Objects.isNull(nimbusJwtDecoder)) {
             SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
 
