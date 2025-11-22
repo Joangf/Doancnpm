@@ -84,7 +84,7 @@ const handleSubmit = async (e) => {
       localStorage.setItem('authToken', responseData.result.token);
       localStorage.setItem('idUser', responseData.result.id);
       setIsLoggedIn(true);
-      sessionStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('isLoggedIn', 'true');
       navigate("/");
     });
     

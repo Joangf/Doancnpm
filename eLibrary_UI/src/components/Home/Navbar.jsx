@@ -114,7 +114,9 @@ const Navbar = ({isLoggedIn, setIsLoggedIn, activeCategories}) => {
         console.log("Logged out successfully");
         setIsDropdownOpen(false);
         setIsLoggedIn(false);
-        sessionStorage.setItem('isLoggedIn', 'false');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('idUser');
+        localStorage.setItem('isLoggedIn', 'false');
         navigate("/");
       }
     } catch (error) {

@@ -12,7 +12,7 @@ const getUserInfo = async (token) =>{
   const data = await response.json();
   const idUser = data.result.id;
   localStorage.setItem('idUser', idUser);
-  sessionStorage.setItem('isLoggedIn', 'true');
+  localStorage.setItem('isLoggedIn', 'true');
 }
 const OAuthSuccess = ({ setIsLoggedIn }) => {
   const [params] = useSearchParams();

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MemoryRouter } from "react-router-dom";
-import Login from "../components/Login.jsx";
+import Login from "../pages/Login.jsx";
 import Log from "../components/AuthForm/Log.jsx";
 import Reg from "../components/AuthForm/Reg.jsx";
 

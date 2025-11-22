@@ -157,6 +157,7 @@ const UserProfilePage = ({ isLoggedIn, setIsLoggedIn }) => {
       if (response.ok) {
         localStorage.removeItem("authToken");
         localStorage.removeItem("idUser");
+        localStorage.setItem("isLoggedIn", "false");
         setIsLoggedIn(false);
         navigate("/");
       }
