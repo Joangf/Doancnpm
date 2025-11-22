@@ -14,17 +14,28 @@ public interface BookEsRepository extends ElasticsearchRepository<BookEs, String
     @Query("""
     {
       "bool": {
-        "must": {
-          "query_string": {
-            "query": "*?0*",
-            "fields": ["title^3", "translatedTitle^2", "author^2", "description", "publisher"],
-            "analyze_wildcard": true
+        "should": [
+          {
+            "multi_match": {
+              "query": "?0",
+              "fields": ["title^3", "translatedTitle^2", "author^2", "description", "publisher"],
+              "type": "best_fields",
+              "fuzziness": "AUTO",
+              "operator": "and"
+            }
+          },
+          {
+            "multi_match": {
+              "query": "?0",
+              "fields": ["title^3", "translatedTitle^2", "author^2", "description", "publisher"],
+              "type": "bool_prefix",
+              "operator": "and"
+            }
           }
-        },
+        ],
+        "minimum_should_match": 1,
         "filter": {
-          "terms": {
-            "categoryIds": ?1
-          }
+          "terms": { "categoryIds": ?1 }
         }
       }
     }
@@ -33,16 +44,27 @@ public interface BookEsRepository extends ElasticsearchRepository<BookEs, String
 
     @Query("""
     {
-      "query_string": {
-        "query": "*?0*",
-        "fields": [
-          "title^3",
-          "translatedTitle^2",
-          "author^2",
-          "description",
-          "publisher"
+      "bool": {
+        "should": [
+          {
+            "multi_match": {
+              "query": "?0",
+              "fields": ["title^3", "translatedTitle^2", "author^2", "description", "publisher"],
+              "type": "best_fields",
+              "fuzziness": "AUTO",
+              "operator": "and"
+            }
+          },
+          {
+            "multi_match": {
+              "query": "?0",
+              "fields": ["title^3", "translatedTitle^2", "author^2", "description", "publisher"],
+              "type": "bool_prefix",
+              "operator": "and"
+            }
+          }
         ],
-        "analyze_wildcard": true
+        "minimum_should_match": 1
       }
     }
     """)
