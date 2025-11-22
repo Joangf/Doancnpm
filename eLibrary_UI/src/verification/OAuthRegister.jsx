@@ -73,7 +73,7 @@ const OAuthRegister = ({ setIsLoggedIn }) => {
             const data = await response.json();
             localStorage.setItem('authToken', data.result.token);
             localStorage.setItem('idUser', data.result.id);
-            sessionStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('isLoggedIn', 'true');
             setIsLoggedIn(true);
             navigate("/"); 
         }, 2000);

@@ -59,7 +59,7 @@ const SessionManager = ({ isLoggedIn, setIsLoggedIn, children }) => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     localStorage.removeItem("authToken");
     localStorage.removeItem("idUser");
-    sessionStorage.setItem("isLoggedIn", "false");
+    localStorage.setItem("isLoggedIn", "false");
     setIsLoggedIn(false);
     navigate("/login");
   };

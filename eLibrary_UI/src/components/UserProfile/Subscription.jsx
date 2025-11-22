@@ -13,8 +13,9 @@ const Subscription = ({ subscriptionPlan, activeSubscriptionPlan }) => {
       });
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('currentPlanId', id);
-        window.location.href = data.result.paymentUrl;
+        sessionStorage.setItem('currentPlanId', id);
+        sessionStorage.setItem('paymentUrl', data.result.paymentUrl);
+        window.open(data.result.paymentUrl, "_blank");
       }
     } catch (error) {
       console.error("Payment failed:", error);

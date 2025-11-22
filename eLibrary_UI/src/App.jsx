@@ -13,7 +13,7 @@ import SessionManager from './utils/SessionManager';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    const stored = sessionStorage.getItem('isLoggedIn');
+    const stored = localStorage.getItem('isLoggedIn');
     return stored === 'true';
   });
 

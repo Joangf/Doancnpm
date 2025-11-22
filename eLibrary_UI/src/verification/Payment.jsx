@@ -3,7 +3,12 @@ const API_URL = import.meta.env.VITE_BACKEND_URL;
 import TickingFail from "../utils/TickingFail";
 import TickingSuccess from "../utils/TickingSuccess";
 const handlePaymentSuccess = async (setPaymentStatus) => {
-  const planId = localStorage.getItem('currentPlanId');
+  const planId = sessionStorage.getItem('currentPlanId');
+  const paymentUrl = sessionStorage.getItem('paymentUrl');
+  if (!planId || !paymentUrl) {
+    setPaymentStatus(false);
+    return;
+  }
   const idUser = localStorage.getItem('idUser');
   const authToken = localStorage.getItem('authToken');
   try {
@@ -20,7 +25,6 @@ const handlePaymentSuccess = async (setPaymentStatus) => {
     });
     if (response.ok) {
       setPaymentStatus(true);
-      localStorage.removeItem('currentPlanId');
     }
     else {
       setPaymentStatus(false);
@@ -40,6 +44,11 @@ const Payment = () => {
   useEffect(() => {
     handlePaymentSuccess(setPaymentStatus);
     redirectToHome();
+    return () => {
+      sessionStorage.removeItem('currentPlanId');
+      sessionStorage.removeItem('paymentUrl');
+    };
+    
   }, []);
   return (
     <>
