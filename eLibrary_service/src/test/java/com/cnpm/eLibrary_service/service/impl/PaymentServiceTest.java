@@ -79,7 +79,7 @@ class PaymentServiceTest {
         when(vnPayConfig.getReturnUrl()).thenReturn("http://return.url");
         when(vnPayConfig.getUrl()).thenReturn("http://vnpay.url");
 
-        // QUAN TRỌNG: Mock Static Method của VnPayUtil
+        //  Mock Static Method của VnPayUtil
         try (MockedStatic<VnPayUtil> utilities = mockStatic(VnPayUtil.class)) {
             utilities.when(() -> VnPayUtil.getIpAddress(httpServletRequest)).thenReturn("127.0.0.1");
             utilities.when(() -> VnPayUtil.hashAllFields(anyMap())).thenReturn("hashedData");
