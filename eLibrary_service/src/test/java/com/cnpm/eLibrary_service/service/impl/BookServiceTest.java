@@ -121,8 +121,6 @@ class BookServiceTest {
         // Set danh sách category là rỗng
         bookRequest.setCategoryNames(Collections.emptySet());
 
-        // Cần mock mapper vì dòng đầu tiên của service là gọi mapper.toBook()
-        // Nếu không mock, nó sẽ trả về null (mặc định mockito) và code vẫn chạy xuống validate
         when(bookMapper.toBook(bookRequest)).thenReturn(new Book());
 
         // WHEN & THEN
@@ -238,8 +236,6 @@ class BookServiceTest {
         bookService.deleteBook(100L);
 
         // Verify xóa DB
-        // Lưu ý: Trong code Service của bạn có gọi bookRepository.delete(book) 2 lần (duplicate line),
-        // nên ở đây verify times(2) hoặc times(1) tuỳ thực tế, nhưng logic đúng là phải gọi.
         verify(bookRepository, atLeastOnce()).delete(book);
 
         // Verify xóa ES
@@ -359,7 +355,7 @@ class BookServiceTest {
     @Test
     void getNewBooks_InvalidPeriod_Fail() {
         GetNewBooksRequest request = new GetNewBooksRequest();
-        request.setPeriod("year"); // Period không hỗ trợ
+        request.setPeriod("year");
 
         AppException ex = assertThrows(AppException.class, () -> bookService.getNewBooks(request));
         assertEquals(ErrorCode.INVALID_PERIOD, ex.getErrorCode());
