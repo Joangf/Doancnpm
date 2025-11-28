@@ -993,7 +993,6 @@ describe("UserProfilePage", () => {
       });
 
       // Verify that user details section exists in the DOM
-      // This confirms the structure for displaying user name and subscription plan is present
       const userDetailsSection = document.querySelector('.user-details');
       expect(userDetailsSection).toBeInTheDocument();
     });
