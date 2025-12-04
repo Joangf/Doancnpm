@@ -69,10 +69,10 @@ jwt:
 
 
 frontend:
-  base-url: http://20.2.85.225.nip.io
+  base-url: http://20.2.85.225
   oauth:
-    register-url: http://20.2.85.225.nip.io/oauth-register
-    success-url: http://20.2.85.225.nip.io/oauth-success
+    register-url: http://20.2.85.225/oauth-register
+    success-url: http://20.2.85.225/oauth-success
 
 
 vnpay:
@@ -83,9 +83,9 @@ vnpay:
   url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
 
 
-  returnUrl: http://20.2.85.225.nip.io/payment
+  returnUrl: http://20.2.85.225/payment
 
-  ipnUrl: https://subhepatic-kensley-myelinic.ngrok-free.dev/api/payment/vnpay-callback
+  ipnUrl: http://20.2.85.225:8080/api/payment/vnpay-callback
 
 server:
   port: 8080
