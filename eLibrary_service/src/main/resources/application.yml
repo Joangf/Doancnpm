@@ -69,10 +69,10 @@ jwt:
 
 
 frontend:
-  base-url: http://localhost:5173
+  base-url: http://20.2.85.225
   oauth:
-    register-url: http://localhost:5173/oauth-register
-    success-url: http://localhost:5173/oauth-success
+    register-url: http://20.2.85.225/oauth-register
+    success-url: http://20.2.85.225/oauth-success
 
 
 vnpay:
@@ -83,7 +83,7 @@ vnpay:
   url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
 
 
-  returnUrl: http://localhost:5173/payment
+  returnUrl: http://20.2.85.225/payment
 
   ipnUrl: https://subhepatic-kensley-myelinic.ngrok-free.dev/api/payment/vnpay-callback
 

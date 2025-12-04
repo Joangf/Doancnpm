@@ -85,7 +85,7 @@ services:
     build: ./eLibrary_UI
     container_name: elibrary-ui
     ports:
-      - "5173:80"
+      - "80:80"
     depends_on:
       - elibrary-app
 volumes:

@@ -1277,7 +1277,7 @@ async function postData() {
   console.log(books.length);
   // Run 1 lần
   const response = await fetch(
-    "http://localhost:8080/api/auth/login",
+    "http://20.2.85.225:8080/api/auth/login",
     request({
       identifier: "admin",
       password: "admin",
@@ -1287,14 +1287,14 @@ async function postData() {
   const token = data.result.token;
   console.log("token:", token);
   for (const sub of subscription) {
-    await fetch("http://localhost:8080/api/subscription-plan", request(sub, token));
+    await fetch("http://20.2.85.225:8080/api/subscription-plan", request(sub, token));
   }
   for (const category of categories) {
-    await fetch("http://localhost:8080/api/category", request(category, token));
+    await fetch("http://20.2.85.225:8080/api/category", request(category, token));
   }
 
   for (const book of books) {
-    await fetch("http://localhost:8080/api/book", request(book, token));
+    await fetch("http://20.2.85.225:8080/api/book", request(book, token));
   }
 }
 
