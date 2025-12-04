@@ -15,7 +15,7 @@ const Subscription = ({ subscriptionPlan, activeSubscriptionPlan }) => {
         const data = await response.json();
         sessionStorage.setItem('currentPlanId', id);
         sessionStorage.setItem('paymentUrl', data.result.paymentUrl);
-        window.open(data.result.paymentUrl, "_blank");
+        window.location.href = data.result.paymentUrl;
       }
     } catch (error) {
       console.error("Payment failed:", error);
