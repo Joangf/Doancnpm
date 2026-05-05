@@ -2,12 +2,20 @@
 
 ## 🧰 Tech Stack
 
-![Java](https://img.shields.io/badge/Java-21-007396?style=flat-square)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.5-6DB33F?style=flat-square)
-![React](https://img.shields.io/badge/React-19.1.1-61dafb?style=flat-square)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES2023-f7df1e?style=flat-square)
 
 
+<div align="center">
+
+![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+![React](https://img.shields.io/badge/React-19.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2023-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Docker](https://img.shields.io/badge/Docker-24.x-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-7.x-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![Elasticsearch](https://img.shields.io/badge/Elasticsearch-8.x-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)
+
+</div>
 Dự án eLibrary là một hệ thống quản lý thư viện điện tử hiện đại, cho phép người dùng đọc sách trực tuyến, mượn sách, đánh giá sách và quản lý gói đăng ký. Dự án được xây dựng với kiến trúc microservices, sử dụng Spring Boot cho backend và React cho frontend.
 
 ## 🎯 Tính năng chính
