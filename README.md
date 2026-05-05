@@ -1,5 +1,13 @@
 # 📚 eLibrary - Hệ thống Thư viện Điện tử
 
+## 🧰 Tech Stack
+
+![Java](https://img.shields.io/badge/Java-21-007396?style=flat-square)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.5-6DB33F?style=flat-square)
+![React](https://img.shields.io/badge/React-19.1.1-61dafb?style=flat-square)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2023-f7df1e?style=flat-square)
+
+
 Dự án eLibrary là một hệ thống quản lý thư viện điện tử hiện đại, cho phép người dùng đọc sách trực tuyến, mượn sách, đánh giá sách và quản lý gói đăng ký. Dự án được xây dựng với kiến trúc microservices, sử dụng Spring Boot cho backend và React cho frontend.
 
 ## 🎯 Tính năng chính
